@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet name="/css/login.css"/>
+    </h:head>
+    <h:body>
+        <div class="login">
+            <h:form id="formLogin"> 
+                <p:growl id="mensaje"  showDetail="true" life="3000" />
+                <p:panel header="Sistema de recursos humanos" widgetVar="dlg" >
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="usuario" value="Usuario:" />
+                        <p:inputText id="usuario" value="#{loginControlador.usuario}" placeholder="Usuario" required="true" label="username" requiredMessage="Escriba el usuario por favor" />
+                        <h:outputLabel for="password" value="Password:" />
+                        <p:password id="password" value="#{loginControlador.clave}" placeholder="Password" required="true" label="password" requiredMessage="Escriba el password por favor" />
+                        <f:facet name="footer">
+                            <cener> <p:commandButton  icon="ui-icon-person" value="Ingresar" update="mensaje" action="#{loginControlador.login()}" oncomplete="PF('tipoDialogo').show();"/></cener>
+                        </f:facet>  
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+            <h:form id="formDetalles">
+                <p:dialog widgetVar="tipoDialogo" modal="true" header="Codigo de verificacion." resizable="true">
+                    <p:panelGrid columns="2">
+                        <h:outputText value="Ingrese el codigo enviado a su correo"/>
+                        <p:inputText value="#{loginControlador.codeUsuario}"/>
+                        <h:outputText value="->"/>
+                        <p:commandButton value="Verificar" actionListener="#{loginControlador.validar()}"/>
+                    </p:panelGrid>
+                </p:dialog>
+            </h:form>
+        </div>
+    </h:body>
+</html>
+

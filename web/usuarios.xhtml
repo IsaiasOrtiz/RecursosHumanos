@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="./plantillas/menuadmin.xhtml">
+
+            <ui:define name="content">
+                <div class="main_content" style="padding-left: 10px; padding-top:20px ; padding-right: 400px">
+        <h3>Lista de usuarios</h3>
+        <p:growl id="mensajes" showDetail="true" sticky="true" />
+        <p:messages id="mensajesAll" showDetail="true" closable="true">
+            <p:autoUpdate />
+        </p:messages>
+        <h:form id="formTipo">
+
+            <p:dataTable var="ep" value="#{usuariosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
+                <p:column headerText="Id" sortBy="#{ep.usId}"> 
+                    <h:outputText value="#{ep.usId}"/>
+                </p:column>
+                <p:column headerText="Usuario" sortBy="#{ep.usUsuario}"> 
+                    <h:outputText value="#{ep.usUsuario}"/>
+                </p:column>
+                <p:column headerText="Nombres del usaurio" sortBy="#{ep.epId.epNombres}"> 
+                    <h:outputText value="#{ep.epId.epNombres}"/>
+                </p:column>
+
+                <p:column headerText="Tipo" sortBy="#{ep.tpId.tpNombre}"> 
+                    <h:outputText value="#{ep.tpId.tpNombre}"/>
+                </p:column>
+                <p:column headerText="Ver"> 
+                    <p:commandButton update=":formEditar" oncomplete="PF('editarDialogo').show();" icon="pi pi-search" title="Ver">
+                        <f:setPropertyActionListener value="#{ep}" target="#{usuariosControlador.entidadSeleccion}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            <p:commandButton value="Registrar empleado" actionListener="#{usuariosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
+        </h:form>
+
+        <h:form id="formDetalles">
+            <p:dialog widgetVar="tipoDialogo" modal="true" header="Registrar Usuario" resizable="true">
+                <p:panelGrid columns="2">
+                    <h:outputText value="Id"/>
+                    <p:inputText value="#{usuariosControlador.entidadSeleccion.usId}"/>
+                    <h:outputText value="Usuario"/>
+                    <p:inputText value="#{usuariosControlador.entidadSeleccion.usUsuario}"/>
+                    <h:outputText value="Clave"/>
+                    <p:inputText value="#{usuariosControlador.clave}"/>
+                    <p:outputLabel value="Tipo de usuario:"/>
+                    <p:selectOneMenu value="#{usuariosControlador.tipo}">
+                        <f:selectItem itemLabel="-- Seleccione -- "/>
+                        <f:selectItems value="#{usuariosControlador.listaTipos}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Empleado:"/>
+                    <p:selectOneMenu value="#{usuariosControlador.empleado}">
+                        <f:selectItem itemLabel="-- Seleccione -- "/>
+                        <f:selectItems value="#{usuariosControlador.listaEmpleados}"/>
+                    </p:selectOneMenu>
+
+                    <p:commandButton value="Guardar" actionListener="#{usuariosControlador.guardarNuevaEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        <h:form id="formEditar">
+            <p:dialog widgetVar="editarDialogo" modal="true" header="Usuario" resizable="true">
+                <p:panelGrid columns="2">
+                    <h:outputText value="Id"/>
+                    <p:inputText value="#{usuariosControlador.entidadSeleccion.usId}"/>
+                    <h:outputText value="Usuario"/>
+                    <p:inputText value="#{usuariosControlador.entidadSeleccion.usUsuario}"/>
+                     <p:outputLabel value="Tipo de usuario:"/>
+                    <p:selectOneMenu value="#{usuariosControlador.tipo}">
+                        <f:selectItem itemLabel="-- Seleccione -- "/>
+                        <f:selectItems value="#{usuariosControlador.listaTipos}"/>
+                    </p:selectOneMenu>
+                    <p:commandButton value="Eliminar" actionListener="#{usuariosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
+                    <p:commandButton value="Editar" actionListener="#{usuariosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+         </div>
+            </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>

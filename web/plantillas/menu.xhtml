@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <link rel="stylesheet" href="resources/css/styles.css"/>
+        <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+        <title>Facelets Template</title>
+    </h:head>
+
+    <h:body>
+        <f:event listener="#{loginControlador.validarSessionRh()}" type="preRenderView"/>
+        <div class="wrapper">
+            <div id="left">
+                <ui:insert name="left"></ui:insert>
+
+                <div class="sidebar">
+                    <h2>Bitlab</h2>
+                    <ul>
+
+
+                        <li><a href="#"><i></i>#{loginControlador.usuario}</a></li>
+                        <li><a href=""><i class="fas fa-home"></i>Inicio</a></li>
+                        <li><a href="empleados.bat"><i class="fas fa-user"></i>Empleados</a></li>
+                        <li><a href="Planilla.bat"><i class="fas fa-address-card"></i>Planilla</a></li>
+                        <li><a href="pagos.bat"><i class="fas fa-credit-card"></i>Ver pagos</a></li>
+
+                        <li><h:form><h:commandButton value="Cerrar session" actionListener="#{loginControlador.cerrarSesion()}"/>
+                            </h:form></li>
+
+                    </ul> 
+
+                </div>
+
+
+            </div>
+
+            <div id="content" class="left_content">
+                <ui:insert name="content">Content</ui:insert>
+            </div>
+        </div>
+    </h:body>
+
+</html>
