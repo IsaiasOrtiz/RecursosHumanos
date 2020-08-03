@@ -15,19 +15,15 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
-      <ui:composition template="./plantillas/menu.xhtml">
-
-            <ui:define name="content">
-                <div class="main_content" style="padding-left: 10px; padding-top:20px ; padding-right: 400px">
-                
+     
            
 
         <h3>Lista de empleados</h3>
-        <p:growl id="mensajes" showDetail="true" sticky="true" />
+        <p:growl id="mensajes" showDetail="true" sticky="true" life="3000"/>
         <p:messages id="mensajesAll" showDetail="true" closable="true">
             <p:autoUpdate />
         </p:messages>
-        <h:form id="formTipo">
+        <h:form id="formEmpleados">
 
             <p:dataTable var="ep" value="#{empleadosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
                 <p:column headerText="Id" sortBy="#{ep.epId}"> 
@@ -58,6 +54,7 @@ and open the template in the editor.
             </p:dataTable>
              <br/>
             <p:commandButton value="Registrar empleado" actionListener="#{empleadosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
+            <p:commandButton value="Crear departamento" actionListener="#{departamentoControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('dpDialogo').show();"/>
         </h:form>
 
         <h:form id="formDetalles">
@@ -80,23 +77,37 @@ and open the template in the editor.
                     <p:outputLabel value="Sexo: " />
                     <p:inputText value="#{empleadosControlador.entidadSeleccion.epSexo}"/>
                     <p:outputLabel value="Departamento:"/>
-                    <p:selectOneMenu value="#{empleadosControlador.departamentoJoin}">
-                        <f:selectItem itemLabel="-- Seleccione -- "/>
-                        <f:selectItems value="#{empleadosControlador.departamento}"/>
+                    <p:selectOneMenu  id="idDepartamento" value="#{empleadosControlador.entidadSeleccion.dpId}">
+                        <f:selectItems value="#{empleadosControlador.departamentoController.encontrarTodos()}"
+                                       var="dp" 
+                                       itemLabel="#{dp.dpNombre}" 
+                                       itemValue="#{dp}"/>
                     </p:selectOneMenu>
                     <p:outputLabel value="Estado:"/>
-                    <p:selectOneMenu value="#{empleadosControlador.estadoJoin}">
-                        <f:selectItem itemLabel="-- Seleccione -- "/>
-                        <f:selectItems value="#{empleadosControlador.estado}"/>
+                    <p:selectOneMenu  id="idEstado" value="#{empleadosControlador.entidadSeleccion.esId}">
+                        <f:selectItems value="#{empleadosControlador.estadoController.encontrarTodos()}"
+                                       var="es" 
+                                       itemLabel="#{es.esNombre}" 
+                                       itemValue="#{es}"/>
                     </p:selectOneMenu>
-                    <p:commandButton value="Eliminar" actionListener="#{empleadosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
-                    <p:commandButton value="Guardar" actionListener="#{empleadosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
+     
+                    <p:commandButton value="Eliminar" actionListener="#{empleadosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
+                    <p:commandButton value="Guardar" actionListener="#{empleadosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
+                     
                 </p:panelGrid>
             </p:dialog>
         </h:form>
-              </div>
-            </ui:define>
-
-        </ui:composition>
+              
+        <h:form id="formDepartamento">
+            <p:dialog widgetVar="dpDialogo" modal="true" header="Departamento" resizable="true">
+                <p:panelGrid columns="2">
+                    <h:outputText value="Id"/>
+                    <p:inputText value="#{departamentoControlador.entidadSeleccion.dpId}"/>
+                    <h:outputText value="Nombre"/>
+                    <p:inputText value="#{departamentoControlador.entidadSeleccion.dpNombre}"/>
+                    <p:commandButton value="Guardar" actionListener="#{departamentoControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
     </h:body>
 </html>

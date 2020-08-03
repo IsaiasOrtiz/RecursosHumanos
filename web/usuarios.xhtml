@@ -15,16 +15,13 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
-        <ui:composition template="./plantillas/menuadmin.xhtml">
-
-            <ui:define name="content">
-                <div class="main_content" style="padding-left: 10px; padding-top:20px ; padding-right: 400px">
+        
         <h3>Lista de usuarios</h3>
         <p:growl id="mensajes" showDetail="true" sticky="true" />
         <p:messages id="mensajesAll" showDetail="true" closable="true">
             <p:autoUpdate />
         </p:messages>
-        <h:form id="formTipo">
+        <h:form id="formUsuarios">
 
             <p:dataTable var="ep" value="#{usuariosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
                 <p:column headerText="Id" sortBy="#{ep.usId}"> 
@@ -46,7 +43,8 @@ and open the template in the editor.
                     </p:commandButton>
                 </p:column>
             </p:dataTable>
-            <p:commandButton value="Registrar empleado" actionListener="#{usuariosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
+            <br/>
+            <p:commandButton value="Crear un nuevo usuario" actionListener="#{usuariosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
         </h:form>
 
         <h:form id="formDetalles">
@@ -58,18 +56,22 @@ and open the template in the editor.
                     <p:inputText value="#{usuariosControlador.entidadSeleccion.usUsuario}"/>
                     <h:outputText value="Clave"/>
                     <p:inputText value="#{usuariosControlador.clave}"/>
-                    <p:outputLabel value="Tipo de usuario:"/>
-                    <p:selectOneMenu value="#{usuariosControlador.tipo}">
-                        <f:selectItem itemLabel="-- Seleccione -- "/>
-                        <f:selectItems value="#{usuariosControlador.listaTipos}"/>
+                    <p:outputLabel value="Tipo:"/>
+                    <p:selectOneMenu  id="idTipoU" value="#{usuariosControlador.entidadSeleccion.tpId}">
+                        <f:selectItems value="#{usuariosControlador.tipo.encontrarTodos()}"
+                                       var="es" 
+                                       itemLabel="#{es.tpNombre}" 
+                                       itemValue="#{es}"/>
                     </p:selectOneMenu>
                     <p:outputLabel value="Empleado:"/>
-                    <p:selectOneMenu value="#{usuariosControlador.empleado}">
-                        <f:selectItem itemLabel="-- Seleccione -- "/>
-                        <f:selectItems value="#{usuariosControlador.listaEmpleados}"/>
+                    <p:selectOneMenu  id="idEmpleado" value="#{usuariosControlador.entidadSeleccion.epId}">
+                        <f:selectItems value="#{usuariosControlador.empleado.encontrarTodos()}"
+                                       var="ep" 
+                                       itemLabel="#{ep.epId}-#{ep.epNombres}" 
+                                       itemValue="#{ep}"/>
                     </p:selectOneMenu>
 
-                    <p:commandButton value="Guardar" actionListener="#{usuariosControlador.guardarNuevaEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
+                    <p:commandButton value="Guardar" actionListener="#{usuariosControlador.guardarNuevaEntidad()}" update=":mensajes :mensajesAll :formUsuarios"/>
                 </p:panelGrid>
             </p:dialog>
         </h:form>
@@ -80,19 +82,18 @@ and open the template in the editor.
                     <p:inputText value="#{usuariosControlador.entidadSeleccion.usId}"/>
                     <h:outputText value="Usuario"/>
                     <p:inputText value="#{usuariosControlador.entidadSeleccion.usUsuario}"/>
-                     <p:outputLabel value="Tipo de usuario:"/>
-                    <p:selectOneMenu value="#{usuariosControlador.tipo}">
-                        <f:selectItem itemLabel="-- Seleccione -- "/>
-                        <f:selectItems value="#{usuariosControlador.listaTipos}"/>
+                      <p:outputLabel value="Tipo:"/>
+                    <p:selectOneMenu  id="idTipo" value="#{usuariosControlador.entidadSeleccion.tpId}">
+                        <f:selectItems value="#{usuariosControlador.tipo.encontrarTodos()}"
+                                       var="es" 
+                                       itemLabel="#{es.tpNombre}" 
+                                       itemValue="#{es}"/>
                     </p:selectOneMenu>
-                    <p:commandButton value="Eliminar" actionListener="#{usuariosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
-                    <p:commandButton value="Editar" actionListener="#{usuariosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
+                    <p:commandButton value="Eliminar" actionListener="#{usuariosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formUsuarios"/>
+                    <p:commandButton value="Editar" actionListener="#{usuariosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formUsuarios"/>
                 </p:panelGrid>
             </p:dialog>
         </h:form>
-         </div>
-            </ui:define>
-
-        </ui:composition>
+         
     </h:body>
 </html>

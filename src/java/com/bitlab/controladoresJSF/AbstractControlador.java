@@ -19,7 +19,7 @@ import javax.annotation.PreDestroy;
  *
  * @author elcon
  */
-public abstract class AbstractControlador<T> implements Serializable {
+public abstract class AbstractControlador<T>  implements Serializable{
 
     private T entidadSeleccion;
     private List<T> entidadLista;
@@ -31,7 +31,12 @@ public abstract class AbstractControlador<T> implements Serializable {
 
     @PostConstruct
     public void cargarInformacion() {
-        entidadLista = getControlador().encontrarTodos();
+        try {
+            entidadLista = getControlador().encontrarTodos();
+            nuevaEntidad();
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(AbstractControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @PreDestroy
@@ -58,7 +63,7 @@ public abstract class AbstractControlador<T> implements Serializable {
     public void guardarEntidad() {
         try {
             System.out.println("Guardando " + claseEntidad);
-            join();
+            auditoria();
             getControlador().editar(entidadSeleccion);
             historial();
             cargarInformacion();
@@ -113,9 +118,10 @@ public abstract class AbstractControlador<T> implements Serializable {
 
     public void join() {
     }
-
+    public abstract void auditoria();
+    
     public abstract AbstractController<T> getControlador();
-
+    
     public void historial() {
     }
     public void encryptar()

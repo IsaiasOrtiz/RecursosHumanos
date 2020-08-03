@@ -5,9 +5,9 @@
  */
 package com.bitlab.controladoresJSF;
 
-import com.bitlab.controladoresJPA.AbstractController;
 import com.bitlab.controladoresJPA.AreaController;
 import com.bitlab.entidades.Area;
+import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -17,11 +17,13 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class DepartamentoControlador extends AbstractControlador<Area>{
+public class DepartamentoControlador extends AbstractControlador<Area> {
+
     private AreaController areaControlador;
+
     public DepartamentoControlador() {
         super(Area.class);
-        areaControlador=new AreaController();
+        areaControlador = new AreaController();
     }
 
     @Override
@@ -29,9 +31,13 @@ public class DepartamentoControlador extends AbstractControlador<Area>{
         return areaControlador;
     }
 
+    @Override
+    public void auditoria() {
+        getEntidadSeleccion().setAFechaModificacion(new Date());
+
+    }
+
     /**
      * Creates a new instance of DepartamentoControlador
      */
-    
-    
 }

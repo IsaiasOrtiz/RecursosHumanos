@@ -7,6 +7,7 @@ package com.bitlab.controladoresJSF;
 
 import com.bitlab.controladoresJPA.PagosController;
 import com.bitlab.entidades.Pagos;
+import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -27,6 +28,11 @@ public class PagosControlador extends AbstractControlador<Pagos>{
     @Override
     public PagosController getControlador() {
         return pagosController;
+    }
+
+    @Override
+    public void auditoria() {
+         getEntidadSeleccion().setAFechaModificacion(new Date());
     }
 
     /**

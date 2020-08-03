@@ -5,12 +5,11 @@
  */
 package com.bitlab.controladoresJSF;
 
-import com.bitlab.controladoresJPA.TipoController;
-import com.bitlab.entidades.Tipo;
+import com.bitlab.controladoresJPA.EstadoController;
+import com.bitlab.entidades.Estado;
 import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-
 
 /**
  *
@@ -18,26 +17,27 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class TipoControlador extends AbstractControlador<Tipo>{
-    private TipoController tipoControlador;
-    public TipoControlador() {
-        super(Tipo.class);
-        tipoControlador=new TipoController();
+public class EstadoControlador extends AbstractControlador<Estado> {
+
+    private EstadoController estadoController;
+
+    public EstadoControlador() {
+        super(Estado.class);
+        estadoController = new EstadoController();
     }
 
     /**
-     * Creates a new instance of TipoControlador
+     * Creates a new instance of EstadoControlador
      */
-  
-
     @Override
-    public TipoController getControlador() {
-       return tipoControlador;
+    public EstadoController getControlador() {
+        return estadoController;
     }
 
     @Override
     public void auditoria() {
         getEntidadSeleccion().setAFechaModificacion(new Date());
+
     }
-    
+
 }

@@ -13,6 +13,7 @@ import com.bitlab.entidades.Tipo;
 import com.bitlab.entidades.Usuario;
 import com.bitlab.utilidades.Encryptacion;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,12 +29,10 @@ import javax.faces.model.SelectItem;
 @ViewScoped
 public class UsuariosControlador extends AbstractControlador<Usuario> {
 
-    private String clave;
-    private String tipo;
-    private String empleado;
     private UsuarioController usuarioControlador;
-    private List<SelectItem> listaTipos;
-    private List<SelectItem> listaEmpleados;
+    private TipoController tipo;
+    private EmpleadoController empleado;
+    private String clave;
 
     /**
      * Creates a new instance of UsuariosControlador
@@ -41,27 +40,32 @@ public class UsuariosControlador extends AbstractControlador<Usuario> {
     public UsuariosControlador() {
         super(Usuario.class);
         usuarioControlador = new UsuarioController();
-
-    }
-
-    @Override
-    public void join() {
-        try {
-            EmpleadoController ep = new EmpleadoController();
-            TipoController tp = new TipoController();
-            tipo = tipo.replaceAll("\\D+", "");
-            empleado = empleado.replaceAll("\\D+", "");
-            getEntidadSeleccion().setEpId(ep.buscarObject(Integer.parseInt(empleado)));
-            getEntidadSeleccion().setTpId(tp.buscarObject(Integer.parseInt(tipo)));
-        } catch (Exception ex) {
-            Logger.getLogger(UsuariosControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        tipo = new TipoController();
+        empleado=new EmpleadoController();
     }
 
     @Override
     public UsuarioController getControlador() {
         return usuarioControlador;
+    }
+
+    @Override
+    public void encryptar() {
+        Encryptacion en = new Encryptacion();
+        getEntidadSeleccion().setUsClave(en.getEncryptacion(clave));
+    }
+
+    @Override
+    public void auditoria() {
+        getEntidadSeleccion().setAFechaModificacion(new Date());
+    }
+
+    public UsuarioController getUsuarioControlador() {
+        return usuarioControlador;
+    }
+
+    public void setUsuarioControlador(UsuarioController usuarioControlador) {
+        this.usuarioControlador = usuarioControlador;
     }
 
     public String getClave() {
@@ -72,50 +76,20 @@ public class UsuariosControlador extends AbstractControlador<Usuario> {
         this.clave = clave;
     }
 
-    public String getTipo() {
+    public TipoController getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoController tipo) {
         this.tipo = tipo;
     }
 
-    public String getEmpleado() {
+    public EmpleadoController getEmpleado() {
         return empleado;
     }
 
-    public void setEmpleado(String empleado) {
+    public void setEmpleado(EmpleadoController empleado) {
         this.empleado = empleado;
     }
-
-    public List<SelectItem> getListaTipos() {
-        listaTipos = new ArrayList<SelectItem>();
-        TipoController tp = new TipoController();
-        
-        List<Tipo> list = tp.encontrarTodos();
-        listaTipos.clear();
-        for (Tipo e : list) {
-            SelectItem item = new SelectItem(e.getTpId() + "-" + e.getTpNombre());
-            listaTipos.add(item);
-        }
-        return listaTipos;
-    }
-
-    public List<SelectItem> getListaEmpleados() {
-        listaEmpleados = new ArrayList<SelectItem>();
-        EmpleadoController tp = new EmpleadoController();
-        List<Empleado> list = tp.encontrarTodos();
-        listaEmpleados.clear();
-        for (Empleado e : list) {
-            SelectItem item = new SelectItem(e.getEpId() + "-" + e.getEpNombres());
-            listaEmpleados.add(item);
-        }
-        return listaEmpleados;
-    }
-    @Override
-    public void encryptar()
-    {
-        Encryptacion en=new Encryptacion();
-        getEntidadSeleccion().setUsClave(en.getEncryptacion(clave));
-    }
+    
 }
