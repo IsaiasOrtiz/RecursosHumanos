@@ -15,7 +15,9 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
-        
+         <ui:composition template="./plantillas/TemplateAdm.xhtml">
+
+            <ui:define name="content">
         <h3>Lista de usuarios</h3>
         <p:growl id="mensajes" showDetail="true" sticky="true" />
         <p:messages id="mensajesAll" showDetail="true" closable="true">
@@ -27,14 +29,14 @@ and open the template in the editor.
                 <p:column headerText="Id" sortBy="#{ep.usId}"> 
                     <h:outputText value="#{ep.usId}"/>
                 </p:column>
-                <p:column headerText="Usuario" sortBy="#{ep.usUsuario}"> 
+                <p:column headerText="Usuario" sortBy="#{ep.usUsuario}" filterBy="#{ep.usUsuario}" filterMatchMode="contains"> 
                     <h:outputText value="#{ep.usUsuario}"/>
                 </p:column>
-                <p:column headerText="Nombres del usaurio" sortBy="#{ep.epId.epNombres}"> 
+                <p:column headerText="Nombres del usaurio" sortBy="#{ep.epId.epNombres}" filterBy="#{ep.epId.epNombres}" filterMatchMode="contains"> 
                     <h:outputText value="#{ep.epId.epNombres}"/>
                 </p:column>
 
-                <p:column headerText="Tipo" sortBy="#{ep.tpId.tpNombre}"> 
+                <p:column headerText="Tipo" sortBy="#{ep.tpId.tpNombre}" filterBy="#{ep.tpId.tpNombre}" filterMatchMode="contains"> 
                     <h:outputText value="#{ep.tpId.tpNombre}"/>
                 </p:column>
                 <p:column headerText="Ver"> 
@@ -94,6 +96,8 @@ and open the template in the editor.
                 </p:panelGrid>
             </p:dialog>
         </h:form>
-         
+            </ui:define>
+
+        </ui:composition>
     </h:body>
 </html>

@@ -16,10 +16,10 @@ and open the template in the editor.
     </h:head>
     
     <h:body>
-         <ui:composition template="./plantillas/menuadmin.xhtml">
+         <ui:composition template="./plantillas/TemplateAdm.xhtml">
 
             <ui:define name="content">
-                <div class="main_content" style="padding-left: 10px; padding-top:20px ; padding-right: 400px">
+                
         <h3>Lista de departamentos</h3>
         <p:growl id="mensajes" showDetail="true" sticky="true" />
         <p:messages id="mensajesAll" showDetail="true" closable="true">
@@ -55,7 +55,7 @@ and open the template in the editor.
                 </p:panelGrid>
             </p:dialog>
         </h:form>
-         </div>
+         
             </ui:define>
 
         </ui:composition>

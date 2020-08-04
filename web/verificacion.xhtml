@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet name="/css/login.css"/>
+    </h:head>
+    <h:body>
+        <f:event listener="#{loginControlador.dobleFactor()}" type="preRenderView"/>
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <h:outputText value="Estamos verificando su usuario."/>
+        </p:dialog>
+        <div class="login">
+            <h:form id="formVerificar"> 
+                <p:growl id="mensaje"  showDetail="true" life="3000" />
+                <p:panel header="Ingrese el codigo de verificacion" widgetVar="dlg" >
+                    <h:panelGrid columns="2" cellpadding="5" rowClasses="2">
+                        <h:outputLabel for="usuario" value="Codigo:" />
+                        <p:inputText id="usuario" value="#{loginControlador.codeUsuario}" placeholder="Codigo" required="true" label="username" requiredMessage="Escriba el usuario por favor" />
+                        <f:facet name="footer">
+                            <cener> <p:commandButton  icon="ui-icon-person" value="Verificar" update="mensaje" action="#{loginControlador.validar()}"/></cener>
+                        </f:facet>  
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+            <h:outputText value="Ayuda: El codigo de verificacion se "/>
+            <h:outputText value="envia al correo del usuario"/>
+        </div>
+    </h:body>
+</html>
+
+

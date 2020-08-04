@@ -10,6 +10,7 @@ import com.bitlab.entidades.Usuario;
 import com.bitlab.utilidades.Encryptacion;
 import com.bitlab.utilidades.Mensajes;
 import com.bitlab.utilidades.UtilidadesWeb;
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -20,7 +21,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class LoginControlador {
+public class LoginControlador implements Serializable{
 
     private String usuario;
     private String clave;
@@ -28,6 +29,7 @@ public class LoginControlador {
     private UsuarioController us;
     private int code = -1;
     private int codeUsuario;
+    private boolean sessionActiva;
 
     /**
      * Creates a new instance of LoginControlador
@@ -42,6 +44,7 @@ public class LoginControlador {
     }
 
     public void login() {
+        sessionActiva = false;
         try {
             Usuario user = us.getUsuario(usuario);
             if (user != null) {
@@ -50,16 +53,26 @@ public class LoginControlador {
                     code = ((int) (Math.random() * 1000000 + 100000));
                     Mensajes msj = new Mensajes();
                     msj.enviarMensaje("Codigo de verificacion", code + "", usuario);
-                    clave = "";
+                    tipo = user.getTpId().getTpId();
+                    sessionActiva = false;
+                    intentos = 0;
+                    UtilidadesWeb.redireccion("verificacion");
+                    clave = null;
                 }
             } else {
                 UtilidadesWeb.mensajeError("Error", "Usuario o clave invalido.");
+                cerrarObjetos();
             }
         } catch (Exception e) {
             UtilidadesWeb.mensajeError("Error", "Usuario o clave invalido.");
+            cerrarObjetos();
         }
 
     }
+    /**
+     * Valida el codigo de verificacion para poder entrar el sistema
+     */
+    byte intentos = 0;
 
     public void validar() {
 
@@ -68,14 +81,26 @@ public class LoginControlador {
                 Usuario user = us.getUsuario(usuario);
                 setTipo(user.getTpId().getTpId());
                 if (tipo == 1) {
-                    UtilidadesWeb.redireccion("empleados");
+                    code = -1;
+                    sessionActiva = true;
+                    UtilidadesWeb.redireccion("iniciorh");
                 } else if (tipo == 2) {
+                    sessionActiva = true;
+                    UtilidadesWeb.redireccion("iniciorh");
+                    code = -1;
                 }
             } else {
-                code = -1;
+                sessionActiva = false;
+                intentos++;
+                UtilidadesWeb.mensajeError("Codigo invalido", "Intentos restantes " + (3 - intentos));
+                if (intentos == 3) {
+                    cerrarObjetos();
+                }
+
             }
         } else {
-            UtilidadesWeb.redireccion("index");
+            cerrarSesion();
+            
         }
     }
 
@@ -112,54 +137,48 @@ public class LoginControlador {
     }
 
     public void validarSessionRh() {
-        try {
-            if (tipo == 0) {
-                cerrarSesion();
-                UtilidadesWeb.redireccion("index");
-
+        if (sessionActiva) {
+            if (!(tipo == 1)) {
+                UtilidadesWeb.redireccion("404");
             }
-            if (tipo == 1) {
-
-            } else {
-                cerrarSesion();
-                UtilidadesWeb.redireccion("index");
-
-            }
-        } catch (Exception e) {
-            cerrarSesion();
-            UtilidadesWeb.redireccion("index");
+        } else {
+            UtilidadesWeb.redireccion("404");
         }
 
     }
 
     public void validarSessionAdmin() {
-        try {
-            if (tipo == 0) {
-                cerrarSesion();
-                UtilidadesWeb.redireccion("index");  
+        if (sessionActiva) {
+            if (!(tipo == 2)) {
+                UtilidadesWeb.redireccion("404");
             }
-            if (tipo == 1) {
-                cerrarSesion();
-                UtilidadesWeb.redireccion("index");  
-            }
-            if (tipo == 2) {
-            } else {
-                cerrarSesion();
-                UtilidadesWeb.redireccion("index");
-            }
-        } catch (Exception e) {
-            cerrarSesion();
+        } else {
+            UtilidadesWeb.redireccion("404");
+        }
+    }
+
+    /**
+     * Metodo especial para la validacion del doble factor de autenticacion el
+     * cual solo deja estar en esa pagina a personas con el tipo 1 o 2 rrhh o
+     * admin
+     */
+    public void dobleFactor() {
+        if (!(tipo == 1 || tipo == 2)) {
             UtilidadesWeb.redireccion("index");
         }
-
     }
 
     public void cerrarSesion() {
-        tipo = 0;
-        usuario = "";
-        clave = "";
-        code=-1;
+        cerrarObjetos();
         UtilidadesWeb.redireccion("index");
+    }
+    public void cerrarObjetos()
+    {
+        usuario = null;
+        tipo = 0;
+        usuario = null;
+        clave = null;
+        code = -1;
     }
 
 }

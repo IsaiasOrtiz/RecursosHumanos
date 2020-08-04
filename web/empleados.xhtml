@@ -15,99 +15,123 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
-     
-           
 
-        <h3>Lista de empleados</h3>
-        <p:growl id="mensajes" showDetail="true" sticky="true" life="3000"/>
-        <p:messages id="mensajesAll" showDetail="true" closable="true">
-            <p:autoUpdate />
-        </p:messages>
-        <h:form id="formEmpleados">
+        <ui:composition template="./plantillas/Template.xhtml">
 
-            <p:dataTable var="ep" value="#{empleadosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
-                <p:column headerText="Id" sortBy="#{ep.epId}"> 
-                    <h:outputText value="#{ep.epId}"/>
-                </p:column>
-                <p:column headerText="Nombre" sortBy="#{ep.epNombres}"> 
-                    <h:outputText value="#{ep.epNombres}"/>
-                </p:column>
-                <p:column headerText="Apellidos" sortBy="#{ep.epApellidos}"> 
-                    <h:outputText value="#{ep.epApellidos}"/>
-                </p:column>
-                <p:column headerText="Direccion" sortBy="#{ep.epDireccion}"> 
-                    <h:outputText value="#{ep.epDireccion}"/>
-                </p:column>
-                <p:column headerText="Salario" sortBy="#{ep.epSalario}"> 
-                    <h:outputText value="#{ep.epSalario}"/>
-                </p:column>
-                <p:column headerText="Estado" sortBy="#{ep.esId.esNombre}"> 
-                    <h:outputText value="#{ep.esId.esNombre}"/>
-                </p:column>
+            <ui:define name="content">
+                <h3>Lista de empleados</h3>
+                <p:growl id="mensajes" showDetail="true" sticky="true" life="3000"/>
+                <p:messages id="mensajesAll" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="formEmpleados">
+
+                    <p:dataTable var="ep" value="#{empleadosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
+                        <p:column headerText="Id" sortBy="#{ep.epId}"> 
+                            <h:outputText value="#{ep.epId}"/>
+                        </p:column>
+                        <p:column headerText="Nombre" sortBy="#{ep.epNombres}"> 
+                            <h:outputText value="#{ep.epNombres}"/>
+                        </p:column>
+                        <p:column headerText="Apellidos" sortBy="#{ep.epApellidos}"> 
+                            <h:outputText value="#{ep.epApellidos}"/>
+                        </p:column>
+                        <p:column headerText="Direccion" sortBy="#{ep.epDireccion}"> 
+                            <h:outputText value="#{ep.epDireccion}"/>
+                        </p:column>
+                        <p:column headerText="Salario" sortBy="#{ep.epSalario}"> 
+                            <h:outputText value="#{ep.epSalario}"/>
+                        </p:column>
+                        <p:column headerText="Estado" sortBy="#{ep.esId.esNombre}"> 
+                            <h:outputText value="#{ep.esId.esNombre}"/>
+                        </p:column>
+                        <p:column headerText="Departamento" sortBy="#{ep.dpId.dpNombre}"> 
+                            <h:outputText value="#{ep.dpId.dpNombre}"/>
+                        </p:column>
 
 
-                <p:column headerText="Ver"> 
-                    <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-search" title="Ver">
-                        <f:setPropertyActionListener value="#{ep}" target="#{empleadosControlador.entidadSeleccion}"/>
-                    </p:commandButton>
-                </p:column>
-            </p:dataTable>
-             <br/>
-            <p:commandButton value="Registrar empleado" actionListener="#{empleadosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
-            <p:commandButton value="Crear departamento" actionListener="#{departamentoControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('dpDialogo').show();"/>
-        </h:form>
+                        <p:column headerText="Editar" style="text-align: center"> 
+                            <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-pencil" title="Ver">
+                                <f:setPropertyActionListener value="#{ep}" target="#{empleadosControlador.entidadSeleccion}"/>
+                            </p:commandButton>
+                        </p:column>
+                           <p:column headerText="ELIMINAR" style="text-align: center">
+                               <p:commandButton icon="pi pi-trash" title="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
+               
+                                   <f:setPropertyActionListener target="#{empleadosControlador.eliminarEntidad()}" value="#{ep}"/>
+                                   
+                                </p:commandButton>
+                            </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <p:commandButton value="Registrar empleado" actionListener="#{empleadosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
+                    <p:commandButton value="Crear departamento" actionListener="#{departamentoControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('dpDialogo').show();"/>
+                </h:form>
 
-        <h:form id="formDetalles">
-            <p:dialog widgetVar="tipoDialogo" modal="true" header="Empleado" resizable="true">
-                <p:panelGrid columns="2">
-                    <h:outputText value="Id"/>
-                    <p:inputText value="#{empleadosControlador.entidadSeleccion.epId}"/>
-                    <h:outputText value="Nombres"/>
-                    <p:inputText value="#{empleadosControlador.entidadSeleccion.epNombres}"/>
-                    <h:outputText value="Apellidos"/>
-                    <p:inputText value="#{empleadosControlador.entidadSeleccion.epApellidos}"/>
-                    <h:outputText value="Direccion"/>
-                    <p:inputText value="#{empleadosControlador.entidadSeleccion.epDireccion}"/>
-                    <h:outputText value="Fecha de nacimiento"/>
-                    <p:calendar value="#{empleadosControlador.entidadSeleccion.epFechaNacimiento}" pattern="dd/MM/yyyy" locale="es" navigator="true" mask="true" yearRange="c:c+1"/>
-                    <h:outputText value="DUI"/>
-                    <p:inputText value="#{empleadosControlador.entidadSeleccion.epDui}"/>
-                    <h:outputText value="Salario $"/>
-                    <p:inputText value="#{empleadosControlador.entidadSeleccion.epSalario}"/>
-                    <p:outputLabel value="Sexo: " />
-                    <p:inputText value="#{empleadosControlador.entidadSeleccion.epSexo}"/>
-                    <p:outputLabel value="Departamento:"/>
-                    <p:selectOneMenu  id="idDepartamento" value="#{empleadosControlador.entidadSeleccion.dpId}">
-                        <f:selectItems value="#{empleadosControlador.departamentoController.encontrarTodos()}"
-                                       var="dp" 
-                                       itemLabel="#{dp.dpNombre}" 
-                                       itemValue="#{dp}"/>
-                    </p:selectOneMenu>
-                    <p:outputLabel value="Estado:"/>
-                    <p:selectOneMenu  id="idEstado" value="#{empleadosControlador.entidadSeleccion.esId}">
-                        <f:selectItems value="#{empleadosControlador.estadoController.encontrarTodos()}"
-                                       var="es" 
-                                       itemLabel="#{es.esNombre}" 
-                                       itemValue="#{es}"/>
-                    </p:selectOneMenu>
-     
-                    <p:commandButton value="Eliminar" actionListener="#{empleadosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
-                    <p:commandButton value="Guardar" actionListener="#{empleadosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
-                     
-                </p:panelGrid>
-            </p:dialog>
-        </h:form>
-              
-        <h:form id="formDepartamento">
-            <p:dialog widgetVar="dpDialogo" modal="true" header="Departamento" resizable="true">
-                <p:panelGrid columns="2">
-                    <h:outputText value="Id"/>
-                    <p:inputText value="#{departamentoControlador.entidadSeleccion.dpId}"/>
-                    <h:outputText value="Nombre"/>
-                    <p:inputText value="#{departamentoControlador.entidadSeleccion.dpNombre}"/>
-                    <p:commandButton value="Guardar" actionListener="#{departamentoControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
-                </p:panelGrid>
-            </p:dialog>
-        </h:form>
+                <h:form id="formDetalles">
+                    <p:dialog widgetVar="tipoDialogo" modal="true" header="Empleado" resizable="true" showEffect="fade" hideEffect="explode" >
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Id"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epId}"/>
+                            <h:outputText value="Nombres"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epNombres}"/>
+                            <h:outputText value="Apellidos"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epApellidos}"/>
+                            <h:outputText value="Direccion"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epDireccion}"/>
+                            <h:outputText value="Fecha de nacimiento"/>
+                            <p:calendar value="#{empleadosControlador.entidadSeleccion.epFechaNacimiento}" pattern="dd/MM/yyyy" locale="es" navigator="true" mask="true" yearRange="c:c+1"/>
+                            <h:outputText value="DUI"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epDui}"/>
+                            <h:outputText value="Salario $"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epSalario}"/>
+                            <p:outputLabel value="Sexo: " />
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epSexo}"/>
+                            <p:outputLabel value="Departamento:"/>
+                            <p:selectOneMenu  id="idDepartamento" value="#{empleadosControlador.entidadSeleccion.dpId}">
+                                <f:selectItems value="#{empleadosControlador.departamentoController.encontrarTodos()}"
+                                               var="dp" 
+                                               itemLabel="#{dp.dpNombre}" 
+                                               itemValue="#{dp}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Estado:"/>
+                            <p:selectOneMenu  id="idEstado" value="#{empleadosControlador.entidadSeleccion.esId}">
+                                <f:selectItems value="#{empleadosControlador.estadoController.encontrarTodos()}"
+                                               var="es" 
+                                               itemLabel="#{es.esNombre}" 
+                                               itemValue="#{es}"/>
+                            </p:selectOneMenu>
+
+                            <p:commandButton value="Eliminar" actionListener="#{empleadosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
+                            <p:commandButton value="Guardar" actionListener="#{empleadosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
+
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="formDepartamento" >
+                    <p:dialog widgetVar="dpDialogo" modal="true" header="Departamento" resizable="true" showEffect="fade" hideEffect="explode" >
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Id"/>
+                            <p:inputText value="#{departamentoControlador.entidadSeleccion.dpId}"/>
+                            <h:outputText value="Nombre"/>
+                            <p:inputText value="#{departamentoControlador.entidadSeleccion.dpNombre}"/>
+                            <p:commandButton value="Guardar" actionListener="#{departamentoControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+                 <h:form id="formEliminar">
+                        <p:dialog id="dlgEliminar" header="Eliminar empleado" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                            <h:outputText value="Desea eliminar este registro?"/>
+                            <p:commandButton  value="Si" actionListener="#{empleadosControlador.eliminarEntidad()}" update=":formEmpleados" oncomplete="PF('dialogoEliminar').hide();"/>
+                            <p:commandButton  value="No" onclick="PF('dialogoEliminar').hide();"/>
+                        </p:dialog>
+                    </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+
+
     </h:body>
 </html>
