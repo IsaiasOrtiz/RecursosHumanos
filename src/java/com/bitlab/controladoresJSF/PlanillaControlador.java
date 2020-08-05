@@ -67,7 +67,7 @@ public class PlanillaControlador {
         List<Empleado> empleado = em.encontrarTodos();
         byte cont = 0;
         for (Pagos ph : pagar.encontrarTodos()) {
-            if (ph.getPgFecha().getMonth() == (new Date()).getMonth()) {
+            if (ph.getPgFecha().getMonth() == (new Date()).getMonth() && ph.getPgFecha().getYear() == (new Date()).getYear()) {
                 cont = 10;
             }
         }
@@ -92,5 +92,15 @@ public class PlanillaControlador {
             UtilidadesWeb.mensajeAdvertencia("Pagos", "Los pagos ya se realizaron este mes");
         }
 
+    }
+    public String estadoDePago()
+    {
+     PagosController pagar=new PagosController();
+     for (Pagos ph : pagar.encontrarTodos()) {
+            if (ph.getPgFecha().getMonth() == (new Date()).getMonth() && ph.getPgFecha().getYear() == (new Date()).getYear()) {
+                return "Pagado";
+            }
+        }
+     return "Pendiente de pago";
     }
 }

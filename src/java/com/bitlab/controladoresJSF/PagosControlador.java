@@ -35,6 +35,11 @@ public class PagosControlador extends AbstractControlador<Pagos>{
          getEntidadSeleccion().setAFechaModificacion(new Date());
     }
 
+    @Override
+    public boolean validacionEditar() {
+        return true;
+    }
+
     /**
      * Creates a new instance of PagosControlador
      */

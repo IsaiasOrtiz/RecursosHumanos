@@ -7,6 +7,7 @@ package com.bitlab.controladoresJSF;
 
 import com.bitlab.controladoresJPA.EstadoController;
 import com.bitlab.entidades.Estado;
+import com.bitlab.utilidades.UtilidadesWeb;
 import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -40,4 +41,13 @@ public class EstadoControlador extends AbstractControlador<Estado> {
 
     }
 
+    @Override
+    public boolean validacionEditar() {
+        if (getEntidadSeleccion().getEsNombre().isEmpty()) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El estado no pude quedar vacio");
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

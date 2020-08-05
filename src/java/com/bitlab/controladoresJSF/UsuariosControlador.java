@@ -8,18 +8,12 @@ package com.bitlab.controladoresJSF;
 import com.bitlab.controladoresJPA.EmpleadoController;
 import com.bitlab.controladoresJPA.TipoController;
 import com.bitlab.controladoresJPA.UsuarioController;
-import com.bitlab.entidades.Empleado;
-import com.bitlab.entidades.Tipo;
 import com.bitlab.entidades.Usuario;
 import com.bitlab.utilidades.Encryptacion;
-import java.util.ArrayList;
+import com.bitlab.utilidades.UtilidadesWeb;
 import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
 
 /**
  *
@@ -41,7 +35,7 @@ public class UsuariosControlador extends AbstractControlador<Usuario> {
         super(Usuario.class);
         usuarioControlador = new UsuarioController();
         tipo = new TipoController();
-        empleado=new EmpleadoController();
+        empleado = new EmpleadoController();
     }
 
     @Override
@@ -91,5 +85,30 @@ public class UsuariosControlador extends AbstractControlador<Usuario> {
     public void setEmpleado(EmpleadoController empleado) {
         this.empleado = empleado;
     }
-    
+
+    @Override
+    public boolean validacionEditar() {
+        boolean validarU = true;
+        if (getEntidadSeleccion().getUsUsuario().isEmpty()) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El usuario no puede quedar vacio");
+            validarU = false;
+        }
+        if (getEntidadSeleccion().getUsClave().isEmpty()) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "La clave no puede quedar vacia");
+            validarU = false;
+        }
+        return validarU;
+    }
+
+    @Override
+    public boolean validacionGuardar() {
+        if (getControlador().getUsuario(clave) != null) {
+            UtilidadesWeb.mensajeError("Error", "Al parecer ya existe un usuario con ese correo");
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

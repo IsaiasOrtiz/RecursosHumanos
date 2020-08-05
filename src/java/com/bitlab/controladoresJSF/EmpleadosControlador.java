@@ -11,6 +11,7 @@ import com.bitlab.controladoresJPA.EstadoController;
 import com.bitlab.controladoresJPA.HistorialEmpleadoController;
 import com.bitlab.entidades.Empleado;
 import com.bitlab.entidades.HistorialEmpleado;
+import com.bitlab.utilidades.UtilidadesWeb;
 import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -76,6 +77,48 @@ public class EmpleadosControlador extends AbstractControlador<Empleado> {
     @Override
     public void auditoria() {
         getEntidadSeleccion().setAFechaModificacion(new Date());
+    }
+
+    @Override
+    public boolean validacionEditar() {
+        boolean retornoEp = true;
+        if (getEntidadSeleccion().getEpNombres().isEmpty()) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo nombres no puede quedar vacio");
+            retornoEp = false;
+        }
+        if (getEntidadSeleccion().getEpApellidos().isEmpty()) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo apellidos no puede quedar vacio");
+            retornoEp = false;
+        }
+        if (getEntidadSeleccion().getEpDireccion().isEmpty()) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo direccion no puede quedar vacio");
+            retornoEp = false;
+        }
+        try {
+            if (getEntidadSeleccion().getEpFechaNacimiento() == null) {
+                UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo feecha de nacimiento no puede quedar vacio");
+                retornoEp = false;
+            }
+        } catch (Exception e) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "Al perecer el formato de fecha no es valido");
+            retornoEp = false;
+        }
+        if (getEntidadSeleccion().getEpDui().isEmpty() && getEntidadSeleccion().getEpDui().length() >= 9) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "Al parecer el DUI no cuenta con los digitos necesarios ");
+            retornoEp = false;
+        }
+        if (getEntidadSeleccion().getEpSexo().isEmpty()) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo sexo no puede quedar vacio");
+            retornoEp = false;
+        } else if (!(getEntidadSeleccion().getEpSexo().equals("M") || getEntidadSeleccion().getEpSexo().equals("F"))) {
+            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El sexo debe ser 'M' o 'F'");
+            retornoEp = false;
+        }
+        if(getEntidadSeleccion().getEpSalario() < 300)
+        {
+        UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El salario no puede ser menos a $300");
+        }
+        return retornoEp;
     }
 
 }

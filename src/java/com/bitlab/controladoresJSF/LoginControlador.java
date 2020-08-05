@@ -86,7 +86,7 @@ public class LoginControlador implements Serializable{
                     UtilidadesWeb.redireccion("iniciorh");
                 } else if (tipo == 2) {
                     sessionActiva = true;
-                    UtilidadesWeb.redireccion("iniciorh");
+                    UtilidadesWeb.redireccion("inicioadm");
                     code = -1;
                 }
             } else {
