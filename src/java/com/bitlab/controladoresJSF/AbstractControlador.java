@@ -20,7 +20,9 @@ import javax.annotation.PreDestroy;
  * @author elcon
  */
 public abstract class AbstractControlador<T> implements Serializable {
-
+    private final String FALLO="Algo fallo ";
+    private final String ERROR = "";
+    private final String EXITO ="";
     private T entidadSeleccion;
     private List<T> entidadLista;
     private Class<T> claseEntidad;
@@ -63,14 +65,13 @@ public abstract class AbstractControlador<T> implements Serializable {
     public void guardarEntidad() {
         if (validacionEditar()) {
             try {
-                System.out.println("Guardando " + claseEntidad);
                 auditoria();
                 getControlador().editar(entidadSeleccion);
                 historial();
                 cargarInformacion();
-                UtilidadesWeb.mensajeInfo("Exito!", "El " + claseEntidad.getSimpleName() + " ha sido guardado");
+                UtilidadesWeb.mensajeInfo(EXITO, "El " + claseEntidad.getSimpleName() + " ha sido guardado");
             } catch (Exception e) {
-                UtilidadesWeb.mensajeError("Error", "Algo fallo " + e.getMessage());
+                UtilidadesWeb.mensajeError(ERROR, FALLO + e.getMessage());
             }
         }
     }
@@ -78,28 +79,24 @@ public abstract class AbstractControlador<T> implements Serializable {
     public void guardarNuevaEntidad() {
         if (validacionGuardar()) {
             try {
-                System.out.println("Guardando " + claseEntidad);
                 encryptar();
-                join();
                 getControlador().crear(entidadSeleccion);
                 historial();
                 cargarInformacion();
-                UtilidadesWeb.mensajeInfo("Exito!", "El " + claseEntidad.getSimpleName() + " ha sido guardado");
+                UtilidadesWeb.mensajeInfo(EXITO, "El " + claseEntidad.getSimpleName() + " ha sido guardado");
             } catch (Exception e) {
-                UtilidadesWeb.mensajeError("Error", "Algo fallo " + e.getMessage());
+                UtilidadesWeb.mensajeError(ERROR, FALLO + e.getMessage());
             }
         }
     }
 
     public void eliminarEntidad() {
         try {
-            System.out.println("Eliminando " + claseEntidad.getSimpleName());
             getControlador().destruir(entidadSeleccion);
-            System.out.println(entidadSeleccion.toString());
             cargarInformacion();
-            UtilidadesWeb.mensajeInfo("Exito!", "se elimino " + claseEntidad.getSimpleName());
+            UtilidadesWeb.mensajeInfo(EXITO, "se elimino " + claseEntidad.getSimpleName());
         } catch (Exception e) {
-            UtilidadesWeb.mensajeError("Error", "Algo fallo " + e.getMessage());
+            UtilidadesWeb.mensajeError(ERROR, FALLO + e.getMessage());
         }
     }
 
@@ -117,9 +114,6 @@ public abstract class AbstractControlador<T> implements Serializable {
 
     public void setEntidadLista(List<T> entidadLista) {
         this.entidadLista = entidadLista;
-    }
-
-    public void join() {
     }
 
     public abstract void auditoria();

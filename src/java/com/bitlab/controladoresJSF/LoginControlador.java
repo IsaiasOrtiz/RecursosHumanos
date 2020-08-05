@@ -10,6 +10,7 @@ import com.bitlab.entidades.Usuario;
 import com.bitlab.utilidades.Encryptacion;
 import com.bitlab.utilidades.Mensajes;
 import com.bitlab.utilidades.UtilidadesWeb;
+import com.echo.utilidades.Aleatorio;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -50,7 +51,8 @@ public class LoginControlador implements Serializable{
             if (user != null) {
                 Encryptacion enc = new Encryptacion();
                 if ((enc.getDesencryptacion(user.getUsClave())).equals(clave)) {
-                    code = ((int) (Math.random() * 1000000 + 100000));
+                    Aleatorio al=new Aleatorio();
+                    code = al.numAleatorio();
                     Mensajes msj = new Mensajes();
                     msj.enviarMensaje("Codigo de verificacion", code + "", usuario);
                     tipo = user.getTpId().getTpId();

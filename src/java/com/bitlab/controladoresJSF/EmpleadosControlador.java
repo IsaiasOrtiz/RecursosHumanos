@@ -23,7 +23,7 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class EmpleadosControlador extends AbstractControlador<Empleado> {
-
+    private final String ADVERTENCIA="Advertencia!";
     private EmpleadoController empleadoController;
     private EstadoController estadoController;
     private AreaController departamentoController;
@@ -83,40 +83,40 @@ public class EmpleadosControlador extends AbstractControlador<Empleado> {
     public boolean validacionEditar() {
         boolean retornoEp = true;
         if (getEntidadSeleccion().getEpNombres().isEmpty()) {
-            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo nombres no puede quedar vacio");
+            UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El campo nombres no puede quedar vacio");
             retornoEp = false;
         }
         if (getEntidadSeleccion().getEpApellidos().isEmpty()) {
-            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo apellidos no puede quedar vacio");
+            UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El campo apellidos no puede quedar vacio");
             retornoEp = false;
         }
         if (getEntidadSeleccion().getEpDireccion().isEmpty()) {
-            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo direccion no puede quedar vacio");
+            UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El campo direccion no puede quedar vacio");
             retornoEp = false;
         }
         try {
             if (getEntidadSeleccion().getEpFechaNacimiento() == null) {
-                UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo feecha de nacimiento no puede quedar vacio");
+                UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El campo feecha de nacimiento no puede quedar vacio");
                 retornoEp = false;
             }
         } catch (Exception e) {
-            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "Al perecer el formato de fecha no es valido");
+            UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "Al perecer el formato de fecha no es valido");
             retornoEp = false;
         }
         if (getEntidadSeleccion().getEpDui().isEmpty() && getEntidadSeleccion().getEpDui().length() >= 9) {
-            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "Al parecer el DUI no cuenta con los digitos necesarios ");
+            UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "Al parecer el DUI no cuenta con los digitos necesarios ");
             retornoEp = false;
         }
         if (getEntidadSeleccion().getEpSexo().isEmpty()) {
-            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El campo sexo no puede quedar vacio");
+            UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El campo sexo no puede quedar vacio");
             retornoEp = false;
         } else if (!(getEntidadSeleccion().getEpSexo().equals("M") || getEntidadSeleccion().getEpSexo().equals("F"))) {
-            UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El sexo debe ser 'M' o 'F'");
+            UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El sexo debe ser 'M' o 'F'");
             retornoEp = false;
         }
         if(getEntidadSeleccion().getEpSalario() < 300)
         {
-        UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El salario no puede ser menos a $300");
+        UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El salario no puede ser menos a $300");
         }
         return retornoEp;
     }
