@@ -38,7 +38,7 @@
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">
+                    <a class="nav-link" href="inicioadm.bat">
                         <i class="fa fa-house-user"></i>
                         <span>Inicio</span></a>
                 </li>
@@ -61,7 +61,11 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Opciones</h6>
                             <a class="collapse-item" href="usuarios.bat">Lista de usuarios</a>
-                            <a class="collapse-item" href="#">Reporte de usuarios</a>
+                            <h:form>
+                                <h:commandLink action="#{reportesControlador.reporteUsuarios()}" class="collapse-item" >
+                                    <span>Reporte de empleados</span>
+                                </h:commandLink>
+                            </h:form>
                         </div>
                     </div>
                 </li>
@@ -89,7 +93,11 @@
                             <h6 class="collapse-header">Opciones</h6>
                             <a class="collapse-item" href="departamentos.bat">Lista de departamentos</a>
 
-                            <a class="collapse-item" href="#">Reporte de departamentos</a>
+                            <h:form>
+                                <h:commandLink action="#{reportesControlador.reporteDepartamentos()}" class="collapse-item" >
+                                    <span>Reporte de departamentos</span>
+                                </h:commandLink>
+                            </h:form>
                         </div>
                     </div>
                 </li>
@@ -130,7 +138,7 @@
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
                         </button>
-
+                        Usuario : <h:outputText value="#{loginControlador.usuario}"/>
                     </nav>
                     <!-- End of Topbar -->
 

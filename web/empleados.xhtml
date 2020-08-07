@@ -27,13 +27,13 @@ and open the template in the editor.
                 <h:form id="formEmpleados">
 
                     <p:dataTable var="ep" value="#{empleadosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
-                        <p:column headerText="Id" sortBy="#{ep.epId}"> 
+                        <p:column headerText="Id" sortBy="#{ep.epId}" filterBy="#{ep.epId}" filterMatchMode="contains"> 
                             <h:outputText value="#{ep.epId}"/>
                         </p:column>
-                        <p:column headerText="Nombre" sortBy="#{ep.epNombres}"> 
+                        <p:column headerText="Nombre" sortBy="#{ep.epNombres}" filterBy="#{ep.epNombres}" filterMatchMode="contains"> 
                             <h:outputText value="#{ep.epNombres}"/>
                         </p:column>
-                        <p:column headerText="Apellidos" sortBy="#{ep.epApellidos}"> 
+                        <p:column headerText="Apellidos" sortBy="#{ep.epApellidos}" filterBy="#{ep.epApellidos}" filterMatchMode="contains"> 
                             <h:outputText value="#{ep.epApellidos}"/>
                         </p:column>
                         <p:column headerText="Direccion" sortBy="#{ep.epDireccion}"> 
@@ -42,26 +42,20 @@ and open the template in the editor.
                         <p:column headerText="Salario" sortBy="#{ep.epSalario}"> 
                             <h:outputText value="#{ep.epSalario}"/>
                         </p:column>
-                        <p:column headerText="Estado" sortBy="#{ep.esId.esNombre}"> 
+                        <p:column headerText="Estado" sortBy="#{ep.esId.esNombre}" filterBy="#{ep.esId.esNombre}" filterMatchMode="contains"> 
                             <h:outputText value="#{ep.esId.esNombre}"/>
                         </p:column>
-                        <p:column headerText="Departamento" sortBy="#{ep.dpId.dpNombre}"> 
+                        <p:column headerText="Departamento" sortBy="#{ep.dpId.dpNombre}" filterBy="#{ep.dpId.dpNombre}" filterMatchMode="contains"> 
                             <h:outputText value="#{ep.dpId.dpNombre}"/>
                         </p:column>
 
 
                         <p:column headerText="Editar" style="text-align: center"> 
-                            <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-pencil" title="Ver">
+                            <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-pencil" title="Editar">
                                 <f:setPropertyActionListener value="#{ep}" target="#{empleadosControlador.entidadSeleccion}"/>
                             </p:commandButton>
                         </p:column>
-                           <p:column headerText="ELIMINAR" style="text-align: center">
-                               <p:commandButton icon="pi pi-trash" title="Eliminar" oncomplete="PF('dialogoEliminar').show();" update=":formEliminar">
-               
-                                   <f:setPropertyActionListener target="#{empleadosControlador.eliminarEntidad()}" value="#{ep}"/>
-                                   
-                                </p:commandButton>
-                            </p:column>
+         
                     </p:dataTable>
                     <br/>
                     <p:commandButton value="Registrar empleado" actionListener="#{empleadosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
@@ -102,7 +96,7 @@ and open the template in the editor.
                                                itemValue="#{es}"/>
                             </p:selectOneMenu>
 
-                            <p:commandButton value="Eliminar" actionListener="#{empleadosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
+                            <p:outputLabel value="Opcion:"/>
                             <p:commandButton value="Guardar" actionListener="#{empleadosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
 
                         </p:panelGrid>
@@ -110,7 +104,7 @@ and open the template in the editor.
                 </h:form>
 
                 <h:form id="formDepartamento" >
-                    <p:dialog widgetVar="dpDialogo" modal="true" header="Departamento" resizable="true" showEffect="fade" hideEffect="explode" >
+                    <p:dialog widgetVar="dpDialogo" modal="true" header="Empleado" resizable="true" showEffect="fade" hideEffect="explode" >
                         <p:panelGrid columns="2">
                             <h:outputText value="Id"/>
                             <p:inputText value="#{departamentoControlador.entidadSeleccion.dpId}"/>

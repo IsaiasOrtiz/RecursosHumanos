@@ -13,6 +13,7 @@ import com.bitlab.utilidades.UtilidadesWeb;
 import com.echo.utilidades.Aleatorio;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -22,7 +23,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class LoginControlador implements Serializable{
+public class LoginControlador implements Serializable {
 
     private String usuario;
     private String clave;
@@ -48,10 +49,12 @@ public class LoginControlador implements Serializable{
         sessionActiva = false;
         try {
             Usuario user = us.getUsuario(usuario);
+            System.out.println(user.getUsClave());
             if (user != null) {
                 Encryptacion enc = new Encryptacion();
                 if ((enc.getDesencryptacion(user.getUsClave())).equals(clave)) {
-                    Aleatorio al=new Aleatorio();
+
+                    Aleatorio al = new Aleatorio();
                     code = al.numAleatorio();
                     Mensajes msj = new Mensajes();
                     msj.enviarMensaje("Codigo de verificacion", code + "", usuario);
@@ -60,14 +63,14 @@ public class LoginControlador implements Serializable{
                     intentos = 0;
                     UtilidadesWeb.redireccion("verificacion");
                     clave = null;
+                } else {
+                    user = null;
                 }
             } else {
                 UtilidadesWeb.mensajeError("Error", "Usuario o clave invalido.");
-                cerrarObjetos();
             }
         } catch (Exception e) {
-            UtilidadesWeb.mensajeError("Error", "Usuario o clave invalido.");
-            cerrarObjetos();
+            UtilidadesWeb.mensajeError("Error", "Usuario o clave invalido..");
         }
 
     }
@@ -102,7 +105,7 @@ public class LoginControlador implements Serializable{
             }
         } else {
             cerrarSesion();
-            
+
         }
     }
 
@@ -168,19 +171,29 @@ public class LoginControlador implements Serializable{
         if (!(tipo == 1 || tipo == 2)) {
             UtilidadesWeb.redireccion("index");
         }
+        activeSesion();
     }
 
     public void cerrarSesion() {
         cerrarObjetos();
         UtilidadesWeb.redireccion("index");
     }
-    public void cerrarObjetos()
-    {
+
+    public void cerrarObjetos() {
         usuario = null;
         tipo = 0;
         usuario = null;
         clave = null;
         code = -1;
+    }
+
+    public void activeSesion() {
+        if (sessionActiva) {
+            if(tipo==1)
+            UtilidadesWeb.redireccion("iniciorh");
+            if(tipo==1)
+            UtilidadesWeb.redireccion("inicioadm");
+        }
     }
 
 }

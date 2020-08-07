@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -19,21 +20,19 @@
     </h:head>
 
     <h:body id="page-top">
-
         <f:event listener="#{loginControlador.validarSessionRh()}" type="preRenderView"/>
-
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <h:outputText value="Cargando"/>
+        </p:dialog>
         <!-- Page Wrapper -->
         <div id="wrapper">
-
             <!-- Sidebar -->
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-
                     <div class="sidebar-brand-text mx-3">Bitlab <sup>2020</sup></div>
                 </a>
-
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0"/>
 
@@ -62,7 +61,11 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Opciones</h6>
                             <a class="collapse-item" href="empleados.bat">Lista de empleados</a>
-                            <a class="collapse-item" href="#">Reporte de empleados</a>
+                            <h:form>
+                                <h:commandLink action="#{reportesControlador.reporteEmpleados()}" class="collapse-item" >
+                                    <span>Reporte de empleados</span>
+                                </h:commandLink>
+                            </h:form>
                         </div>
                     </div>
                 </li>
@@ -78,7 +81,16 @@
                             <h6 class="collapse-header">Opciones</h6>
                             <a class="collapse-item" href="Planilla.bat">Planilla mensual</a>
                             <a class="collapse-item" href="pagos.bat">Lista de pagos</a>
-                            <a class="collapse-item" href="utilities-border.html">Reporte de pagos</a>
+                            <h:form>
+                                <h:commandLink action="#{reportesControlador.reportePagos()}" class="collapse-item" >
+                                    <span>Reporte de pagos</span>
+                                </h:commandLink>
+                            </h:form>
+                            <h:form>
+                                <h:commandLink action="#{reportesControlador.reporteDePlanilla()}" class="collapse-item" >
+                                    <span>Excel de pagos</span>
+                                </h:commandLink>
+                            </h:form>
                         </div>
                     </div>
                 </li>
@@ -90,9 +102,13 @@
                     <div id="collapseUtilities2" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Opciones</h6>
-                            <a class="collapse-item" href="departamentos.bat">Lista de departamentos</a>
+                            <a class="collapse-item" href="departamentosRH.bat">Lista de departamentos</a>
 
-                            <a class="collapse-item" href="#">Reporte de departamentos</a>
+                            <h:form>
+                                <h:commandLink action="#{reportesControlador.reporteDepartamentos()}" class="collapse-item" >
+                                    <span>Reporte de departamentos</span>
+                                </h:commandLink>
+                            </h:form>
                         </div>
                     </div>
                 </li>
@@ -126,13 +142,20 @@
                 <div id="content">
 
                     <!-- Topbar -->
-                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
+                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        
                         <!-- Sidebar Toggle (Topbar) -->
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
                         </button>
-
+                        Usuario : <h:outputText value="#{loginControlador.usuario}"/>
+                        <h:form>
+                            <p:column headerText="Editar" style="text-align: center"> 
+                                <p:commandButton update=":formHelp" oncomplete="PF('dialogoAyuda').show();" icon="pi pi-question" title="Editar">
+                                </p:commandButton>
+                            </p:column>
+                        </h:form>
                     </nav>
                     <!-- End of Topbar -->
 
@@ -174,7 +197,19 @@
         </a>
 
 
-
+        <h:form id="formHelp">
+            <p:dialog widgetVar="dialogoAyuda" modal="true" header="Ayuda!" resizable="true">
+                <p:panelGrid columns="1">
+                    <h:outputText value="En la seccion del menu encontrara distintas opciones, entre las cuales estan la lista de departamentos, empleados pagos y planilla
+                                  las cuales nos ayudaran a poder crear un nuevo empleado, tambien el la misma lista de empleados usted puede editar el usuario, para asi cambiar el estado 
+                                  de laborando a despedido, recordar que la opcion de eliminar esta desactivada por lo cual no podra elinimar un empleado
+                                  por control de auditoria, en caso de que el empleado sea despedido o renuncie lo puede cambiar editando el empleado y dicho
+                                  empleado ya no aparecera en la planilla, en planilla usted podra ver la planilla mensual y pagarla, pero si la planilla ya
+                                  fue pagada entonces la pagina mandara un aviso al usuario, asi tambien si un departamento no existe en la aplicacion puede crearlo desde la 
+                                  seccion de empleados, para no salir de la pagina pra crear otro departamento, con cerrar session usted sale de su sesion."/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
         <!-- Core plugin JavaScript-->
