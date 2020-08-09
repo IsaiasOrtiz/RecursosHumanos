@@ -93,22 +93,15 @@ public class UsuariosControlador extends AbstractControlador<Usuario> {
             UtilidadesWeb.mensajeAdvertencia("Advertencia!", "El usuario no puede quedar vacio");
             validarU = false;
         }
-        if (getEntidadSeleccion().getUsClave().isEmpty()) {
+        if (clave.isEmpty()) {
             UtilidadesWeb.mensajeAdvertencia("Advertencia!", "La clave no puede quedar vacia");
             validarU = false;
         }
         return validarU;
     }
-
-    @Override
-    public boolean validacionGuardar() {
-        if (getControlador().getUsuario(clave) != null) {
-            UtilidadesWeb.mensajeError("Error", "Al parecer ya existe un usuario con ese correo");
-            return false;
-        } else {
-            return true;
-        }
-
+    @Override 
+    public boolean validacionGuardar()    
+    {
+        return validacionEditar();
     }
-
 }

@@ -15,87 +15,105 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
-         <ui:composition template="./plantillas/TemplateAdm.xhtml">
+        <ui:composition template="./plantillas/TemplateAdm.xhtml">
 
             <ui:define name="content">
-        <h3>Lista de usuarios</h3>
-        <p:growl id="mensajes" showDetail="true" sticky="true" />
-        <p:messages id="mensajesAll" showDetail="true" closable="true">
-            <p:autoUpdate />
-        </p:messages>
-        <h:form id="formUsuarios">
+                <h3>Lista de usuarios</h3>
+                <p:growl id="mensajes" showDetail="true" sticky="true" />
+                <p:messages id="mensajesAll" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="formUsuarios">                    
+                    <h:commandLink>
+                        <p:graphicImage url="/img/PDF.png" width="35px" height="40px"/>
+                        <p:dataExporter type="pdf" target="usuarios" fileName="usuarios" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/excel.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xls" target="usuarios" fileName="usuarios" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/xml.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xml" target="usuarios" fileName="usuarios" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/CSV.png" width="35px" height="40px"/>
+                        <p:dataExporter type="csv" target="usuarios" fileName="usuarios" pageOnly="false"/>
+                    </h:commandLink>
+                    <p:dataTable id="usuarios" var="ep" value="#{usuariosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
+                        <f:facet name="header">
+                            <h:outputText value="Usuarios"/>
+                        </f:facet>
+                        <p:column headerText="Id" sortBy="#{ep.usId}"> 
+                            <h:outputText value="#{ep.usId}"/>
+                        </p:column>
+                        <p:column headerText="Usuario" sortBy="#{ep.usUsuario}" filterBy="#{ep.usUsuario}" filterMatchMode="contains"> 
+                            <h:outputText value="#{ep.usUsuario}"/>
+                        </p:column>
+                        <p:column headerText="Nombres del usaurio" sortBy="#{ep.epId.epNombres}" filterBy="#{ep.epId.epNombres}" filterMatchMode="contains"> 
+                            <h:outputText value="#{ep.epId.epNombres}"/>
+                        </p:column>
 
-            <p:dataTable var="ep" value="#{usuariosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
-                <p:column headerText="Id" sortBy="#{ep.usId}"> 
-                    <h:outputText value="#{ep.usId}"/>
-                </p:column>
-                <p:column headerText="Usuario" sortBy="#{ep.usUsuario}" filterBy="#{ep.usUsuario}" filterMatchMode="contains"> 
-                    <h:outputText value="#{ep.usUsuario}"/>
-                </p:column>
-                <p:column headerText="Nombres del usaurio" sortBy="#{ep.epId.epNombres}" filterBy="#{ep.epId.epNombres}" filterMatchMode="contains"> 
-                    <h:outputText value="#{ep.epId.epNombres}"/>
-                </p:column>
+                        <p:column headerText="Tipo" sortBy="#{ep.tpId.tpNombre}" filterBy="#{ep.tpId.tpNombre}" filterMatchMode="contains"> 
+                            <h:outputText value="#{ep.tpId.tpNombre}"/>
+                        </p:column>
+                        <p:column headerText="Ver" exportable="false"> 
+                            <p:commandButton update=":formEditar" oncomplete="PF('editarDialogo').show();" icon="pi pi-search" title="Ver">
+                                <f:setPropertyActionListener value="#{ep}" target="#{usuariosControlador.entidadSeleccion}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <p:commandButton value="Crear un nuevo usuario" actionListener="#{usuariosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
+                </h:form>
 
-                <p:column headerText="Tipo" sortBy="#{ep.tpId.tpNombre}" filterBy="#{ep.tpId.tpNombre}" filterMatchMode="contains"> 
-                    <h:outputText value="#{ep.tpId.tpNombre}"/>
-                </p:column>
-                <p:column headerText="Ver"> 
-                    <p:commandButton update=":formEditar" oncomplete="PF('editarDialogo').show();" icon="pi pi-search" title="Ver">
-                        <f:setPropertyActionListener value="#{ep}" target="#{usuariosControlador.entidadSeleccion}"/>
-                    </p:commandButton>
-                </p:column>
-            </p:dataTable>
-            <br/>
-            <p:commandButton value="Crear un nuevo usuario" actionListener="#{usuariosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
-        </h:form>
+                <h:form id="formDetalles">
+                    <p:dialog widgetVar="tipoDialogo" modal="true" header="Registrar Usuario" resizable="true">
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Id"/>
+                            <p:inputText value="#{usuariosControlador.entidadSeleccion.usId}"/>
+                            <h:outputText value="Usuario"/>
+                            <p:inputText value="#{usuariosControlador.entidadSeleccion.usUsuario}"/>
+                            <h:outputText value="Clave"/>
+                            <p:password  value="#{usuariosControlador.clave}"/>
+                            <p:outputLabel value="Tipo:"/>
+                            <p:selectOneMenu  id="idTipoU" value="#{usuariosControlador.entidadSeleccion.tpId}">
+                                <f:selectItems value="#{usuariosControlador.tipo.encontrarTodos()}"
+                                               var="es" 
+                                               itemLabel="#{es.tpNombre}" 
+                                               itemValue="#{es}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Empleado:"/>
+                            <p:selectOneMenu  id="idEmpleado" value="#{usuariosControlador.entidadSeleccion.epId}">
+                                <f:selectItems value="#{usuariosControlador.empleado.encontrarTodos()}"
+                                               var="ep" 
+                                               itemLabel="#{ep.epId}-#{ep.epNombres}" 
+                                               itemValue="#{ep}"/>
+                            </p:selectOneMenu>
 
-        <h:form id="formDetalles">
-            <p:dialog widgetVar="tipoDialogo" modal="true" header="Registrar Usuario" resizable="true">
-                <p:panelGrid columns="2">
-                    <h:outputText value="Id"/>
-                    <p:inputText value="#{usuariosControlador.entidadSeleccion.usId}"/>
-                    <h:outputText value="Usuario"/>
-                    <p:inputText value="#{usuariosControlador.entidadSeleccion.usUsuario}"/>
-                    <h:outputText value="Clave"/>
-                    <p:inputText value="#{usuariosControlador.clave}"/>
-                    <p:outputLabel value="Tipo:"/>
-                    <p:selectOneMenu  id="idTipoU" value="#{usuariosControlador.entidadSeleccion.tpId}">
-                        <f:selectItems value="#{usuariosControlador.tipo.encontrarTodos()}"
-                                       var="es" 
-                                       itemLabel="#{es.tpNombre}" 
-                                       itemValue="#{es}"/>
-                    </p:selectOneMenu>
-                    <p:outputLabel value="Empleado:"/>
-                    <p:selectOneMenu  id="idEmpleado" value="#{usuariosControlador.entidadSeleccion.epId}">
-                        <f:selectItems value="#{usuariosControlador.empleado.encontrarTodos()}"
-                                       var="ep" 
-                                       itemLabel="#{ep.epId}-#{ep.epNombres}" 
-                                       itemValue="#{ep}"/>
-                    </p:selectOneMenu>
-
-                    <p:commandButton value="Guardar" actionListener="#{usuariosControlador.guardarNuevaEntidad()}" update=":mensajes :mensajesAll :formUsuarios"/>
-                </p:panelGrid>
-            </p:dialog>
-        </h:form>
-        <h:form id="formEditar">
-            <p:dialog widgetVar="editarDialogo" modal="true" header="Usuario" resizable="true">
-                <p:panelGrid columns="2">
-                    <h:outputText value="Id"/>
-                    <p:inputText value="#{usuariosControlador.entidadSeleccion.usId}"/>
-                    <h:outputText value="Usuario"/>
-                    <p:inputText value="#{usuariosControlador.entidadSeleccion.usUsuario}"/>
-                      <p:outputLabel value="Tipo:"/>
-                    <p:selectOneMenu  id="idTipo" value="#{usuariosControlador.entidadSeleccion.tpId}">
-                        <f:selectItems value="#{usuariosControlador.tipo.encontrarTodos()}"
-                                       var="es" 
-                                       itemLabel="#{es.tpNombre}" 
-                                       itemValue="#{es}"/>
-                    </p:selectOneMenu>
-                    <p:commandButton value="Eliminar" actionListener="#{usuariosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formUsuarios"/>
-                    <p:commandButton value="Editar" actionListener="#{usuariosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formUsuarios"/>
-                </p:panelGrid>
-            </p:dialog>
-        </h:form>
+                            <p:commandButton value="Guardar" actionListener="#{usuariosControlador.guardarNuevaEntidad()}" update=":mensajes :mensajesAll :formUsuarios"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formEditar">
+                    <p:dialog widgetVar="editarDialogo" modal="true" header="Usuario" resizable="true">
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Id"/>
+                            <p:inputText value="#{usuariosControlador.entidadSeleccion.usId}"/>
+                            <h:outputText value="Usuario"/>
+                            <p:inputText value="#{usuariosControlador.entidadSeleccion.usUsuario}"/>
+                            <p:outputLabel value="Tipo:"/>
+                            <p:selectOneMenu  id="idTipo" value="#{usuariosControlador.entidadSeleccion.tpId}">
+                                <f:selectItems value="#{usuariosControlador.tipo.encontrarTodos()}"
+                                               var="es" 
+                                               itemLabel="#{es.tpNombre}" 
+                                               itemValue="#{es}"/>
+                            </p:selectOneMenu>
+                            <p:commandButton value="Eliminar" actionListener="#{usuariosControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formUsuarios"/>
+                            <p:commandButton value="Editar" actionListener="#{usuariosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formUsuarios"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
             </ui:define>
 
         </ui:composition>

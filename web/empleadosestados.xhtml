@@ -11,7 +11,7 @@ and open the template in the editor.
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>TODO supply a title</title>
+        <title>Bitlab</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
@@ -20,13 +20,32 @@ and open the template in the editor.
 
             <ui:define name="content">
                 <h3>Lista de empleados</h3>
+
                 <p:growl id="mensajes" showDetail="true" sticky="true" life="3000"/>
                 <p:messages id="mensajesAll" showDetail="true" closable="true">
                     <p:autoUpdate />
                 </p:messages>
                 <h:form id="formEmpleados">
-
-                    <p:dataTable var="ep" value="#{empleadosControlador.entidadLista}" paginator="true" rows="10" reflow="true" emptyMessage="No se encontraron registros">
+                    <h:commandLink>
+                        <p:graphicImage url="/img/PDF.png" width="35px" height="40px"/>
+                        <p:dataExporter type="pdf" target="empl" fileName="Empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/excel.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xls" target="empl" fileName="Empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/xml.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xml" target="empl" fileName="Empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/CSV.png" width="35px" height="40px"/>
+                        <p:dataExporter type="csv" target="empl" fileName="Empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <p:dataTable id="empl" var="ep" value="#{empleadosControlador.entidadLista}" paginator="true" rows="10" reflow="true" emptyMessage="No se encontraron registros">
+                        <f:facet name="header">
+                            <h:outputText value="Lista de empleados"/>
+                        </f:facet>
                         <p:column headerText="Id" sortBy="#{ep.epId}" filterBy="#{ep.epId}" filterMatchMode="contains"> 
                             <h:outputText value="#{ep.epId}"/>
                         </p:column>
@@ -48,7 +67,7 @@ and open the template in the editor.
                         <p:column headerText="Departamento" sortBy="#{ep.dpId.dpNombre}" filterBy="#{ep.dpId.dpNombre}" filterMatchMode="contains"> 
                             <h:outputText value="#{ep.dpId.dpNombre}"/>
                         </p:column>
-                        <p:column headerText="Cambiar estado" style="text-align: center"> 
+                        <p:column headerText="Cambiar estado" style="text-align: center" exportable="false"> 
                             <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-pencil" title="Ver">
                                 <f:setPropertyActionListener value="#{ep}" target="#{empleadosControlador.entidadSeleccion}"/>
                             </p:commandButton>

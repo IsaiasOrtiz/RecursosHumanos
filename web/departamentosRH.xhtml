@@ -14,48 +14,66 @@ and open the template in the editor.
         <title>Departamentos</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
-    
+
     <h:body>
-         <ui:composition template="./plantillas/Template.xhtml">
+        <ui:composition template="./plantillas/Template.xhtml">
 
             <ui:define name="content">
-                
-        <h3>Lista de departamentos</h3>
-        <p:growl id="mensajes" showDetail="true" sticky="true" />
-        <p:messages id="mensajesAll" showDetail="true" closable="true">
-            <p:autoUpdate />
-        </p:messages>
-        <h:form id="formTipo">
 
-            <p:dataTable var="c" value="#{departamentoControlador.entidadLista}" paginator="true" rows="10" reflow="true">
-                <p:column headerText="Id" sortBy="#{c.dpId}"> 
-                    <h:outputText value="#{c.dpId}"/>
-                </p:column>
-                <p:column headerText="Nombre" sortBy="#{c.dpNombre}"> 
-                    <h:outputText value="#{c.dpNombre}"/>
-                </p:column>
-                <p:column headerText="Ver"> 
-                    <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-search" title="Ver">
-                        <f:setPropertyActionListener value="#{c}" target="#{departamentoControlador.entidadSeleccion}"/>
-                    </p:commandButton>
-                </p:column>
-            </p:dataTable>
-            <p:commandButton value="Registrar empleado" actionListener="#{departamentoControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
-        </h:form>
+                <h3>Lista de departamentos</h3>
+                <p:growl id="mensajes" showDetail="true" sticky="true" />
+                <p:messages id="mensajesAll" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="formTipo">
+                    <h:commandLink>
+                        <p:graphicImage url="/img/PDF.png" width="35px" height="40px"/>
+                        <p:dataExporter type="pdf" target="deDepartamentos" fileName="Departamentos" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/excel.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xls" target="deDepartamentos" fileName="Departamentos" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/xml.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xml" target="deDepartamentos" fileName="Departamentos" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/CSV.png" width="35px" height="40px"/>
+                        <p:dataExporter type="csv" target="deDepartamentos" fileName="Departamentos" pageOnly="false"/>
+                    </h:commandLink>
+                    <p:dataTable id="deDepartamentos" var="c" value="#{departamentoControlador.entidadLista}" paginator="true" rows="10" reflow="true">
+                        <f:facet name="header">
+                            <h:outputText value="Departamentos"/>
+                        </f:facet>
+                        <p:column headerText="Id" sortBy="#{c.dpId}"> 
+                            <h:outputText value="#{c.dpId}"/>
+                        </p:column>
+                        <p:column headerText="Nombre" sortBy="#{c.dpNombre}"> 
+                            <h:outputText value="#{c.dpNombre}"/>
+                        </p:column>
+                        <p:column headerText="Ver" exportable="false"> 
+                            <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-search" title="Ver">
+                                <f:setPropertyActionListener value="#{c}" target="#{departamentoControlador.entidadSeleccion}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Crear nuevo departamento" actionListener="#{departamentoControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
+                </h:form>
 
-        <h:form id="formDetalles">
-            <p:dialog widgetVar="tipoDialogo" modal="true" header="Departamento" resizable="true">
-                <p:panelGrid columns="2">
-                    <h:outputText value="Id"/>
-                    <p:inputText value="#{departamentoControlador.entidadSeleccion.dpId}"/>
-                    <h:outputText value="Nombre"/>
-                    <p:inputText value="#{departamentoControlador.entidadSeleccion.dpNombre}"/>
-                    <p:commandButton value="Eliminar" actionListener="#{departamentoControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
-                    <p:commandButton value="Guardar" actionListener="#{departamentoControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
-                </p:panelGrid>
-            </p:dialog>
-        </h:form>
-         
+                <h:form id="formDetalles">
+                    <p:dialog widgetVar="tipoDialogo" modal="true" header="Departamento" resizable="true">
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Id"/>
+                            <p:inputText value="#{departamentoControlador.entidadSeleccion.dpId}"/>
+                            <h:outputText value="Nombre"/>
+                            <p:inputText value="#{departamentoControlador.entidadSeleccion.dpNombre}"/>
+                            <p:commandButton value="Eliminar" actionListener="#{departamentoControlador.eliminarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
+                            <p:commandButton value="Guardar" actionListener="#{departamentoControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formTipo"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+
             </ui:define>
 
         </ui:composition>

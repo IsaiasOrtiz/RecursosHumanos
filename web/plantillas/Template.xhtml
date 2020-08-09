@@ -30,7 +30,7 @@
             <!-- Sidebar -->
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="iniciorh.bat">
                     <div class="sidebar-brand-text mx-3">Bitlab <sup>2020</sup></div>
                 </a>
                 <!-- Divider -->
@@ -61,11 +61,7 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Opciones</h6>
                             <a class="collapse-item" href="empleados.bat">Lista de empleados</a>
-                            <h:form>
-                                <h:commandLink action="#{reportesControlador.reporteEmpleados()}" class="collapse-item" >
-                                    <span>Reporte de empleados</span>
-                                </h:commandLink>
-                            </h:form>
+                            <a class="collapse-item" href="historial.bat">Historicos de empleados</a>
                         </div>
                     </div>
                 </li>
@@ -81,16 +77,6 @@
                             <h6 class="collapse-header">Opciones</h6>
                             <a class="collapse-item" href="Planilla.bat">Planilla mensual</a>
                             <a class="collapse-item" href="pagos.bat">Lista de pagos</a>
-                            <h:form>
-                                <h:commandLink action="#{reportesControlador.reportePagos()}" class="collapse-item" >
-                                    <span>Reporte de pagos</span>
-                                </h:commandLink>
-                            </h:form>
-                            <h:form>
-                                <h:commandLink action="#{reportesControlador.reporteDePlanilla()}" class="collapse-item" >
-                                    <span>Excel de pagos</span>
-                                </h:commandLink>
-                            </h:form>
                         </div>
                     </div>
                 </li>
@@ -103,12 +89,6 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Opciones</h6>
                             <a class="collapse-item" href="departamentosRH.bat">Lista de departamentos</a>
-
-                            <h:form>
-                                <h:commandLink action="#{reportesControlador.reporteDepartamentos()}" class="collapse-item" >
-                                    <span>Reporte de departamentos</span>
-                                </h:commandLink>
-                            </h:form>
                         </div>
                     </div>
                 </li>

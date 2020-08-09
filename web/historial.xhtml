@@ -20,7 +20,7 @@ and open the template in the editor.
 
             <ui:define name="content">
 
-                <h3>Planilla de este mes</h3>
+                <h3>Historial del empleado</h3>
                 <p:growl id="mensajes" showDetail="true" sticky="true" />
                 <p:messages id="mensajesAll" showDetail="true" closable="true">
                     <p:autoUpdate />
@@ -28,53 +28,43 @@ and open the template in the editor.
                 <h:form id="formTipo">
                     <h:commandLink>
                         <p:graphicImage url="/img/PDF.png" width="35px" height="40px"/>
-                        <p:dataExporter type="pdf" target="planillas" fileName="planilla" pageOnly="false"/>
+                        <p:dataExporter type="pdf" target="historial" fileName="HistorialEmpleado" pageOnly="true"/>
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage url="/img/excel.png" width="35px" height="40px"/>
-                        <p:dataExporter type="xls" target="planillas" fileName="planilla" pageOnly="false"/>
+                        <p:dataExporter type="xls" target="historial" fileName="HistorialEmpleado" pageOnly="true"/>
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage url="/img/xml.png" width="35px" height="40px"/>
-                        <p:dataExporter type="xml" target="planillas" fileName="planilla" pageOnly="false"/>
+                        <p:dataExporter type="xml" target="historial" fileName="HistorialEmpleado" pageOnly="true"/>
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage url="/img/CSV.png" width="35px" height="40px"/>
-                        <p:dataExporter type="csv" target="planillas" fileName="planilla" pageOnly="false"/>
+                        <p:dataExporter type="csv" target="historial" fileName="HistorialEmpleado" pageOnly="true"/>
                     </h:commandLink>
-                    <p:dataTable  id="planillas" var="e" value="#{planillaControlador.planilla}" paginator="true" rows="10" reflow="true">
+                    <p:dataTable  id="historial" var="e" value="#{historialControlador.entidadLista}" paginator="true" rows="40" reflow="true">
                         <f:facet name="header">
-                            <h:outputText value="Planilla"/>
+                            <h:outputText value="Historial de empleado"/>
                         </f:facet>
-                        <p:column headerText="Id" sortBy="#{e.idEmpleado}"> 
-                            <h:outputText value="#{e.idEmpleado}"/>
+                        <p:column headerText="Id" sortBy="#{e.htpId}" filterBy="#{e.epId.epNombres}" filterMatchMode="contains"> 
+                            <h:outputText value="#{e.htpId}"/>
                         </p:column>
-                        <p:column headerText="Nombre" sortBy="#{e.nombreEmpleado}"> 
-                            <h:outputText value="#{e.nombreEmpleado}"/>
+                        <p:column headerText="Descripcion" sortBy="#{e.htpDescripcion}"> 
+                            <h:outputText value="#{e.htpDescripcion}"/>
                         </p:column>
-                        <p:column headerText="Fecha" sortBy="#{e.fecha}"> 
-                            <h:outputText value="#{e.fecha}"/>
+                        <p:column headerText="Empleado" sortBy="#{e.epId.epNombres}" filterBy="#{e.epId.epNombres}" filterMatchMode="contains"> 
+                            <h:outputText value="#{e.epId.epNombres}"/>
                         </p:column>
-                        <p:column headerText="Salario" sortBy="#{e.salario}"> 
-                            <h:outputText value="$#{e.salario}"/>
+                        <p:column headerText="Apellidos" sortBy="#{e.epId.epApellidos}"> 
+                            <h:outputText value="#{e.epId.epApellidos}"/>
                         </p:column>
-                        <p:column headerText="Monto a pagar" sortBy="#{e.monto}"> 
-                            <h:outputText value="$#{e.monto}"/>
+                         <p:column headerText="ID Empleado" sortBy="#{e.epId.epId}" filterBy="#{e.epId.epId}" filterMatchMode="exact"> 
+                            <h:outputText value="#{e.epId.epId}"/>
                         </p:column>
                     </p:dataTable>
                     <br/>
-                    <p:commandButton value="Pagar" actionListener="#{planillaControlador.realizarPago()}" oncomplete="PF('tipoDialogo').show();"/>
                 </h:form>
-                <h:form id="formDetalles">
-                    <p:dialog widgetVar="tipoDialogo" modal="true" header="Pagos" resizable="true">
-                        <p:panelGrid columns="1">
-                            <h:outputText value="Ha realizado los pagos."/>
-                        </p:panelGrid>
-                    </p:dialog>
-                </h:form>
-
             </ui:define>
-
         </ui:composition>
     </h:body>
 </html>

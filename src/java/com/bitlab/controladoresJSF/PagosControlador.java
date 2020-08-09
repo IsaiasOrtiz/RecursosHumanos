@@ -17,12 +17,13 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class PagosControlador extends AbstractControlador<Pagos>{
-    
+public class PagosControlador extends AbstractControlador<Pagos> {
+
     private PagosController pagosController;
+
     public PagosControlador() {
         super(Pagos.class);
-        pagosController=new PagosController();
+        pagosController = new PagosController();
     }
 
     @Override
@@ -32,7 +33,7 @@ public class PagosControlador extends AbstractControlador<Pagos>{
 
     @Override
     public void auditoria() {
-         getEntidadSeleccion().setAFechaModificacion(new Date());
+        getEntidadSeleccion().setAFechaModificacion(new Date());
     }
 
     @Override
@@ -43,6 +44,4 @@ public class PagosControlador extends AbstractControlador<Pagos>{
     /**
      * Creates a new instance of PagosControlador
      */
-    
-    
 }

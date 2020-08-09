@@ -19,48 +19,70 @@ and open the template in the editor.
         <ui:composition template="./plantillas/Template.xhtml">
 
             <ui:define name="content">
-              
-                    <h3>Lista de pagos</h3>
-                    <p:growl id="mensajes" showDetail="true" sticky="true" />
-                    <p:messages id="mensajesAll" showDetail="true" closable="true">
-                        <p:autoUpdate />
-                    </p:messages>
-                    <h:form id="formTipo">
 
-                        <p:dataTable var="tp" value="#{pagosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
-                            <p:column headerText="Id" sortBy="#{tp.pgId}"> 
-                                <h:outputText value="#{tp.pgId}"/>
-                            </p:column>
-                            <p:column headerText="Fecha de pago" sortBy="#{tp.pgFecha}"> 
-                                <h:outputText value="#{tp.pgFecha}"/>
-                            </p:column>
-                            <p:column headerText="Empleado" sortBy="#{tp.epId.epNombres}"> 
-                                <h:outputText value="#{tp.epId.epNombres}"/>
-                            </p:column>
-                            <p:column headerText="Monto" sortBy="#{tp.pgMonto}"> 
-                                <h:outputText value="$#{tp.pgMonto}"/>
-                            </p:column>
-                            <p:column headerText="Ver"> 
-                                <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-search" title="Ver">
-                                    <f:setPropertyActionListener value="#{tp}" target="#{pagosControlador.entidadSeleccion}"/>
-                                </p:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                    </h:form>
+                <h3>Lista de pagos</h3>
+                <p:growl id="mensajes" showDetail="true" sticky="true" />
+                <p:messages id="mensajesAll" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="formTipo">
+                    <h:commandLink>
+                        <p:graphicImage url="/img/PDF.png" width="35px" height="40px"/>
+                        <p:dataExporter type="pdf" target="dePagos" fileName="Pagos" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/excel.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xls" target="dePagos" fileName="Pagos" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/xml.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xml" target="dePagos" fileName="Pagos" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/CSV.png" width="35px" height="40px"/>
+                        <p:dataExporter type="csv" target="dePagos" fileName="Pagos" pageOnly="false"/>
+                    </h:commandLink>
+                    <p:dataTable id="dePagos" var="tp" value="#{pagosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
+                        <f:facet name="header">
+                            <h:outputText value="Pagos"/>
+                        </f:facet>
+                        <p:column headerText="Id" sortBy="#{tp.pgId}"> 
+                            <h:outputText value="#{tp.pgId}"/>
+                        </p:column>
+                        <p:column headerText="Fecha de pago" sortBy="#{tp.pgFecha}"> 
+                            <h:outputText value="#{tp.pgFecha}"/>
+                        </p:column>
+                        <p:column headerText="Empleado" sortBy="#{tp.epId.epNombres}"> 
+                            <h:outputText value="#{tp.epId.epNombres}"/>
+                        </p:column>
+                        
+                         <p:column headerText="ID Empleado" sortBy="#{tp.epId.epId}" filterBy="#{tp.epId.epId}" filterMatchMode="exact"> 
+                            <h:outputText value="#{tp.epId.epId}"/>
+                        </p:column>
+                        <p:column headerText="Monto" sortBy="#{tp.pgMonto}"> 
+                            <h:outputText value="$#{tp.pgMonto}"/>
+                        </p:column>
+                        <p:column headerText="Ver" exportable="false"> 
+                            <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-search" title="Ver">
+                                <f:setPropertyActionListener value="#{tp}" target="#{pagosControlador.entidadSeleccion}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
 
-                    <h:form id="formDetalles">
-                        <p:dialog widgetVar="tipoDialogo" modal="true" header="Pago" resizable="true">
-                            <p:panelGrid columns="2">
-                                <h:outputText value="Id"/>
-                                <p:inputText value="#{pagosControlador.entidadSeleccion.pgId}"/>
-                                <h:outputText value="Se le pago:"/>
-                                <p:inputText value="#{pagosControlador.entidadSeleccion.pgMonto}"/>
-                                <h:outputText value="Al empleado:"/>
-                                <p:inputText value="#{pagosControlador.entidadSeleccion.epId.epNombres}"/>
-                            </p:panelGrid>
-                        </p:dialog>
-                    </h:form>
-         
+                <h:form id="formDetalles">
+                    <p:dialog widgetVar="tipoDialogo" modal="true" header="Pago" resizable="true">
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Id"/>
+                            <p:inputText value="#{pagosControlador.entidadSeleccion.pgId}"/>
+                            <h:outputText value="Se le pago:"/>
+                            <p:inputText value="#{pagosControlador.entidadSeleccion.pgMonto}"/>
+                            <h:outputText value="Al empleado:"/>
+                            <p:inputText value="#{pagosControlador.entidadSeleccion.epId.epNombres}"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+
             </ui:define>
 
         </ui:composition>

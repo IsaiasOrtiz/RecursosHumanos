@@ -28,7 +28,7 @@
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="inicioadm.bat">
 
                     <div class="sidebar-brand-text mx-3">Bitlab <sup>2020</sup></div>
                 </a>
@@ -61,11 +61,7 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Opciones</h6>
                             <a class="collapse-item" href="usuarios.bat">Lista de usuarios</a>
-                            <h:form>
-                                <h:commandLink action="#{reportesControlador.reporteUsuarios()}" class="collapse-item" >
-                                    <span>Reporte de empleados</span>
-                                </h:commandLink>
-                            </h:form>
+                             <a class="collapse-item" href="Tipos.bat">Tipos de usuarios</a>
                         </div>
                     </div>
                 </li>
@@ -92,12 +88,6 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Opciones</h6>
                             <a class="collapse-item" href="departamentos.bat">Lista de departamentos</a>
-
-                            <h:form>
-                                <h:commandLink action="#{reportesControlador.reporteDepartamentos()}" class="collapse-item" >
-                                    <span>Reporte de departamentos</span>
-                                </h:commandLink>
-                            </h:form>
                         </div>
                     </div>
                 </li>

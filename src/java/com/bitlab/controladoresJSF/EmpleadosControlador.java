@@ -23,7 +23,8 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class EmpleadosControlador extends AbstractControlador<Empleado> {
-    private final String ADVERTENCIA="Advertencia!";
+
+    private final String ADVERTENCIA = "Advertencia!";
     private EmpleadoController empleadoController;
     private EstadoController estadoController;
     private AreaController departamentoController;
@@ -114,11 +115,15 @@ public class EmpleadosControlador extends AbstractControlador<Empleado> {
             UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El sexo debe ser 'M' o 'F'");
             retornoEp = false;
         }
-        if(getEntidadSeleccion().getEpSalario() < 300)
-        {
-        UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El salario no puede ser menos a $300");
+        if (getEntidadSeleccion().getEpSalario() < 300) {
+            UtilidadesWeb.mensajeAdvertencia(ADVERTENCIA, "El salario no puede ser menos a $300");
         }
         return retornoEp;
+    }
+
+    @Override
+    public boolean validacionGuardar() {
+        return validacionEditar();
     }
 
 }

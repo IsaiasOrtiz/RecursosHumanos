@@ -7,6 +7,12 @@ package com.bitlab.controladoresJSF;
 
 import com.bitlab.controladoresJPA.AbstractController;
 import com.bitlab.utilidades.UtilidadesWeb;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Image;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -14,15 +20,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 /**
  *
  * @author elcon
  */
 public abstract class AbstractControlador<T> implements Serializable {
-    private final String FALLO="Algo fallo ";
-    private final String ERROR = "";
-    private final String EXITO ="";
+
+    private final String FALLO = "Algo fallo ";
+    private final String ERROR = "Error ";
+    private final String EXITO = "Exito!";
     private T entidadSeleccion;
     private List<T> entidadLista;
     private Class<T> claseEntidad;
@@ -99,7 +108,11 @@ public abstract class AbstractControlador<T> implements Serializable {
             UtilidadesWeb.mensajeError(ERROR, FALLO + e.getMessage());
         }
     }
-
+    /**
+     * Toma el valor de la entidad seleccionada en una lista
+     * para poder hacer modificaciones a un campo
+     * @return 
+     */
     public T getEntidadSeleccion() {
         return entidadSeleccion;
     }
@@ -121,13 +134,23 @@ public abstract class AbstractControlador<T> implements Serializable {
     public abstract AbstractController<T> getControlador();
 
     public abstract boolean validacionEditar();
-
+    /**
+     * Podemos agregar el historial si es necesario de un usuario a la hora de 
+     * hacer un insert o update.
+     */
     public void historial() {
     }
-
+    /**
+     * En caso de querer encriptar a la hora de agregar 
+     * solo Override este metodo para tene rlo necesario
+     */
     public void encryptar() {
     }
-
+    /**
+     * Podemos hacer Override de este metodo para validar 
+     * el guardado de datos.
+     * @return 
+     */
     public boolean validacionGuardar() {
         return true;
     }

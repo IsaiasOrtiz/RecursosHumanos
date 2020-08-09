@@ -13,7 +13,6 @@ import com.bitlab.utilidades.UtilidadesWeb;
 import com.echo.utilidades.Aleatorio;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -44,7 +43,9 @@ public class LoginControlador implements Serializable {
     public void cargarPropiedades() {
         us = new UsuarioController();
     }
-
+    /**
+     * Verifica si el usuario y clave ingresado es correcto.
+     */
     public void login() {
         sessionActiva = false;
         try {
@@ -74,11 +75,10 @@ public class LoginControlador implements Serializable {
         }
 
     }
+     byte intentos = 0;
     /**
      * Valida el codigo de verificacion para poder entrar el sistema
      */
-    byte intentos = 0;
-
     public void validar() {
 
         if (code != (-1)) {
@@ -88,9 +88,11 @@ public class LoginControlador implements Serializable {
                 if (tipo == 1) {
                     code = -1;
                     sessionActiva = true;
+                    codeUsuario=0;
                     UtilidadesWeb.redireccion("iniciorh");
                 } else if (tipo == 2) {
                     sessionActiva = true;
+                    codeUsuario=0;
                     UtilidadesWeb.redireccion("inicioadm");
                     code = -1;
                 }
@@ -151,7 +153,9 @@ public class LoginControlador implements Serializable {
         }
 
     }
-
+    /**
+     * Verifica si la sesion esta activa y si no lo manda a la page 404
+     */
     public void validarSessionAdmin() {
         if (sessionActiva) {
             if (!(tipo == 2)) {
@@ -189,10 +193,12 @@ public class LoginControlador implements Serializable {
 
     public void activeSesion() {
         if (sessionActiva) {
-            if(tipo==1)
-            UtilidadesWeb.redireccion("iniciorh");
-            if(tipo==1)
-            UtilidadesWeb.redireccion("inicioadm");
+            if (tipo == 1) {
+                UtilidadesWeb.redireccion("iniciorh");
+            }
+            if (tipo == 1) {
+                UtilidadesWeb.redireccion("inicioadm");
+            }
         }
     }
 

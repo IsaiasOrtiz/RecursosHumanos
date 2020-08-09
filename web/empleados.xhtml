@@ -24,10 +24,31 @@ and open the template in the editor.
                 <p:messages id="mensajesAll" showDetail="true" closable="true">
                     <p:autoUpdate />
                 </p:messages>
-                <h:form id="formEmpleados">
 
-                    <p:dataTable var="ep" value="#{empleadosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
+
+                <h:form id="formEmpleados">
+                    <h:commandLink>
+                        <p:graphicImage url="/img/PDF.png" width="35px" height="40px"/>
+                        <p:dataExporter type="pdf" target="empl" fileName="empleados" pageOnly="false" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/excel.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xls" target="empl" fileName="empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/xml.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xml" target="empl" fileName="empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/CSV.png" width="35px" height="40px"/>
+                        <p:dataExporter type="csv" target="empl" fileName="empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <p:dataTable id="empl" var="ep" value="#{empleadosControlador.entidadLista}" paginator="true" rows="10" reflow="true">
+                        <f:facet name="header">
+                            <h:outputText value="Lista de empleados" />
+                        </f:facet>
                         <p:column headerText="Id" sortBy="#{ep.epId}" filterBy="#{ep.epId}" filterMatchMode="contains"> 
+
                             <h:outputText value="#{ep.epId}"/>
                         </p:column>
                         <p:column headerText="Nombre" sortBy="#{ep.epNombres}" filterBy="#{ep.epNombres}" filterMatchMode="contains"> 
@@ -50,18 +71,73 @@ and open the template in the editor.
                         </p:column>
 
 
-                        <p:column headerText="Editar" style="text-align: center"> 
+                        <p:column headerText="Editar" style="text-align: center" exportable="false"> 
                             <p:commandButton update=":formDetalles" oncomplete="PF('tipoDialogo').show();" icon="pi pi-pencil" title="Editar">
                                 <f:setPropertyActionListener value="#{ep}" target="#{empleadosControlador.entidadSeleccion}"/>
                             </p:commandButton>
                         </p:column>
-         
-                    </p:dataTable>
-                    <br/>
-                    <p:commandButton value="Registrar empleado" actionListener="#{empleadosControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('tipoDialogo').show();"/>
-                    <p:commandButton value="Crear departamento" actionListener="#{departamentoControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('dpDialogo').show();"/>
-                </h:form>
 
+                    </p:dataTable>
+
+                    <br/>
+                    <p:commandButton value="Registrar empleado" actionListener="#{empleadosControlador.nuevaEntidad()}" update=":newformDetalles" oncomplete="PF('newtipoDialogo').show();"/>
+                    <p:commandButton value="Crear departamento" actionListener="#{departamentoControlador.nuevaEntidad()}" update=":formDetalles" oncomplete="PF('dpDialogo').show();"/>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/PDF.png" width="35px" height="40px"/>
+                        <p:dataExporter type="pdf" target="empl" fileName="empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/excel.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xls" target="empl" fileName="empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/xml.png" width="35px" height="40px"/>
+                        <p:dataExporter type="xml" target="empl" fileName="empleados" pageOnly="false"/>
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage url="/img/CSV.png" width="35px" height="40px"/>
+                        <p:dataExporter type="csv" target="empl" fileName="empleados" pageOnly="false"/>
+                    </h:commandLink>
+                </h:form>
+                <h:form id="newformDetalles">
+                    <p:dialog widgetVar="newtipoDialogo" modal="true" header="Empleado" resizable="true" showEffect="fade" hideEffect="explode" >
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Id"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epId}"/>
+                            <h:outputText value="Nombres"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epNombres}"/>
+                            <h:outputText value="Apellidos"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epApellidos}"/>
+                            <h:outputText value="Direccion"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epDireccion}"/>
+                            <h:outputText value="Fecha de nacimiento"/>
+                            <p:calendar value="#{empleadosControlador.entidadSeleccion.epFechaNacimiento}" pattern="dd/MM/yyyy" locale="es" navigator="true" mask="true" yearRange="c:c+1"/>
+                            <h:outputText value="DUI"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epDui}"/>
+                            <h:outputText value="Salario $"/>
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epSalario}"/>
+                            <p:outputLabel value="Sexo: " />
+                            <p:inputText value="#{empleadosControlador.entidadSeleccion.epSexo}"/>
+                            <p:outputLabel value="Departamento:"/>
+                            <p:selectOneMenu  id="idDepartamento" value="#{empleadosControlador.entidadSeleccion.dpId}">
+                                <f:selectItems value="#{empleadosControlador.departamentoController.encontrarTodos()}"
+                                               var="dp" 
+                                               itemLabel="#{dp.dpNombre}" 
+                                               itemValue="#{dp}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Estado:"/>
+                            <p:selectOneMenu  id="idEstado" value="#{empleadosControlador.entidadSeleccion.esId}">
+                                <f:selectItems value="#{empleadosControlador.estadoController.encontrarTodos()}"
+                                               var="es" 
+                                               itemLabel="#{es.esNombre}" 
+                                               itemValue="#{es}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Opcion:"/>
+                            <p:commandButton value="Guardar" actionListener="#{empleadosControlador.guardarNuevaEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
+
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
                 <h:form id="formDetalles">
                     <p:dialog widgetVar="tipoDialogo" modal="true" header="Empleado" resizable="true" showEffect="fade" hideEffect="explode" >
                         <p:panelGrid columns="2">
@@ -95,7 +171,6 @@ and open the template in the editor.
                                                itemLabel="#{es.esNombre}" 
                                                itemValue="#{es}"/>
                             </p:selectOneMenu>
-
                             <p:outputLabel value="Opcion:"/>
                             <p:commandButton value="Guardar" actionListener="#{empleadosControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
 
@@ -106,21 +181,20 @@ and open the template in the editor.
                 <h:form id="formDepartamento" >
                     <p:dialog widgetVar="dpDialogo" modal="true" header="Empleado" resizable="true" showEffect="fade" hideEffect="explode" >
                         <p:panelGrid columns="2">
-                            <h:outputText value="Id"/>
-                            <p:inputText value="#{departamentoControlador.entidadSeleccion.dpId}"/>
+
                             <h:outputText value="Nombre"/>
                             <p:inputText value="#{departamentoControlador.entidadSeleccion.dpNombre}"/>
                             <p:commandButton value="Guardar" actionListener="#{departamentoControlador.guardarEntidad()}" update=":mensajes :mensajesAll :formEmpleados"/>
                         </p:panelGrid>
                     </p:dialog>
                 </h:form>
-                 <h:form id="formEliminar">
-                        <p:dialog id="dlgEliminar" header="Eliminar empleado" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
-                            <h:outputText value="Desea eliminar este registro?"/>
-                            <p:commandButton  value="Si" actionListener="#{empleadosControlador.eliminarEntidad()}" update=":formEmpleados" oncomplete="PF('dialogoEliminar').hide();"/>
-                            <p:commandButton  value="No" onclick="PF('dialogoEliminar').hide();"/>
-                        </p:dialog>
-                    </h:form>
+                <h:form id="formEliminar">
+                    <p:dialog id="dlgEliminar" header="Eliminar empleado" widgetVar="dialogoEliminar" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                        <h:outputText value="Desea eliminar este registro?"/>
+                        <p:commandButton  value="Si" actionListener="#{empleadosControlador.eliminarEntidad()}" update=":formEmpleados" oncomplete="PF('dialogoEliminar').hide();"/>
+                        <p:commandButton  value="No" onclick="PF('dialogoEliminar').hide();"/>
+                    </p:dialog>
+                </h:form>
             </ui:define>
 
         </ui:composition>
